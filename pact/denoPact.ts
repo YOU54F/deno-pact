@@ -223,7 +223,7 @@ export class DenoPact {
     return this;
   }
 
-  public async executeTest(callback: () => Promise<void>) {
+  public async executeTest(callback:  () => Promise<void>) {
     if (this.mockServerPort) {
       try {
         await callback();

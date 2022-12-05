@@ -32,7 +32,4 @@ jobs:
       - run: ./run get_pact_ffi
       - run: ./run get_pact_plugin_cli
       - run: /root/bin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
-      - run: ./run test_grpc_area_client
-      - run: ./run test_grpc_greeter_client
-      - run: ./run run_area_calculator
-      - run: ./run run_grpc_greeter
+      - run: ./run all

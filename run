@@ -17,6 +17,7 @@ case $(uname -sm) in
 esac
 
 denor="deno run -A --unstable"
+denot="deno test -A --unstable"
 
 case "$1" in
 #CMD - get_pact_ffi
@@ -33,11 +34,11 @@ get_protobuf_plugin)
     ;;
 #CMD - test_grpc_area_client
 test_grpc_area_client)
-    $denor pact/usage/areaCalculatorClientTest.ts
+    $denot pact/usage/areaCalculatorClientTest.ts
     ;;
 #CMD - test_grpc_greeter_client
 test_grpc_greeter_client)
-    $denor pact/usage/greeterClientTest.ts
+    $denot pact/usage/greeterClientTest.ts
     ;;
 #CMD - run_area_calculator
 run_area_calculator)
@@ -48,6 +49,14 @@ run_area_calculator)
 run_grpc_greeter)
     $denor pact/usage/greeter/greeterServer.ts & _pid=$!;
     sleep 3 && $denor pact/usage/greeter/greeterClient.ts --run ;kill $_pid
+    ;;
+#CMD - run_product_api_provider
+run_product_api_provider)
+    $denor pact/usage/productApi/provider/server.ts
+    ;;
+#CMD - run_product_api_provider
+test_product_api_provider)
+    $denot pact/usage/productApi/provider/product/product.test.ts
     ;;
 #CMD - act
 act)
