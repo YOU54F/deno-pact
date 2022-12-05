@@ -1,0 +1,99 @@
+{
+  "errors": [
+    {
+      "code": "request.path-or-method.unknown",
+      "message": "Path or method not defined in spec file: GET /getNotMyModel",
+      "mockDetails": {
+        "interactionDescription": "a request for myModel",
+        "interactionState": "[none]",
+        "location": "[root].interactions[0].request.path",
+        "mockFile": "content",
+        "value": "/getNotMyModel"
+      },
+      "source": "spec-mock-validation",
+      "specDetails": {
+        "location": "[root].paths",
+        "pathMethod": null,
+        "pathName": null,
+        "specFile": "content",
+        "value": {
+          "/getMyModel": {
+            "get": {
+              "tags": ["developers"],
+              "summary": "searches inventory",
+              "operationId": "getMyModel",
+              "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+              "responses": {
+                "200": {
+                  "description": "search results matching criteria",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "optionalString": {
+                            "type": "string",
+                            "description": "optional string",
+                            "nullable": true
+                          },
+                          "optionalData": {
+                            "type": "object",
+                            "nullable": true,
+                            "description": "optional data",
+                            "properties": { "data": { "type": "string" } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": { "description": "bad input parameter" }
+              }
+            }
+          },
+          "/getOtherModel": {
+            "get": {
+              "tags": ["developers"],
+              "summary": "searches inventory",
+              "operationId": "getOtherModel",
+              "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+              "responses": {
+                "200": {
+                  "description": "search results matching criteria",
+                  "content": {
+                    "application/json": {
+                      "schema": {
+                        "type": "object",
+                        "properties": {
+                          "requiredString": {
+                            "type": "string",
+                            "description": "required data"
+                          },
+                          "requiredData": {
+                            "description": "required data",
+                            "type": "object",
+                            "nullable": true,
+                            "properties": { "data": { "type": "string" } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "400": { "description": "bad input parameter" }
+              }
+            }
+          }
+        }
+      },
+      "type": "error"
+    }
+  ],
+  "failureReason": "Mock file \"content\" is not compatible with spec file \"content\"",
+  "success": false,
+  "warnings": [],
+  "consumer": "ExampleConsumer",
+  "provider": "ExampleProvider",
+  "specContentPathOrUrl": "content",
+  "mockContentPathOrUrl": "content"
+}

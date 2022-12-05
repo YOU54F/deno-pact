@@ -1,0 +1,9 @@
+{
+  "errors": [],
+  "success": true,
+  "warnings": [],
+  "consumer": "ExampleConsumer",
+  "provider": "ExampleProvider",
+  "specContentPathOrUrl": "content",
+  "mockContentPathOrUrl": "content"
+}

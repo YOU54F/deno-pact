@@ -58,6 +58,10 @@ run_product_api_provider)
 test_product_api_provider)
     $denot pact/usage/productApi/provider/product/product.test.ts
     ;;
+#CMD - test_smv_service
+test_smv_service)
+    $denot pact/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts
+    ;;
 #CMD - act
 act)
     act --container-architecture linux/amd64

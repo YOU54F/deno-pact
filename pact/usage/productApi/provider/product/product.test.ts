@@ -44,7 +44,7 @@ describe("Product API tests", () => {
           version: "v2"
         }
       ];
-      const response = await fetch("hrttp://localhost:3000/products");
+      const response = await fetch("http://localhost:3000/products");
       const actual = await response.json();
       console.log("response", { actual, expected });
       expect(actual).toEqual(expected);
