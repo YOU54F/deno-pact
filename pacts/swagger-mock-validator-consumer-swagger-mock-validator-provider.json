@@ -1,0 +1,621 @@
+{
+  "consumer": {
+    "name": "swagger-mock-validator-consumer"
+  },
+  "interactions": [
+    {
+      "description": "an HTTP request that doesnt in the OpenAPI definition",
+      "key": "f38d1937427328d3",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "an OpenAPI definition exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "oas": {
+              "content": {
+                "components": {
+                  "schemas": {
+                    "childModel": {
+                      "description": "<description generated from the ChildModel class definition, eg if OpenApiPropertyAnnotation were allowed on classes>",
+                      "nullable": true,
+                      "properties": {
+                        "data": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "myModel": {
+                      "properties": {
+                        "optionalData": {
+                          "description": "optional data",
+                          "nullable": true,
+                          "properties": {
+                            "data": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "optionalString": {
+                          "description": "optional string",
+                          "nullable": true,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "otherModel": {
+                      "properties": {
+                        "requiredData": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/childModel"
+                            }
+                          ],
+                          "description": "required data"
+                        },
+                        "requiredString": {
+                          "description": "required data",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                },
+                "info": {
+                  "contact": {
+                    "email": "you@your-company.com"
+                  },
+                  "description": "This is a simple API",
+                  "license": {
+                    "name": "Apache 2.0",
+                    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+                  },
+                  "title": "Simple Inventory API",
+                  "version": "1.0.0"
+                },
+                "openapi": "3.0.0",
+                "paths": {
+                  "/getMyModel": {
+                    "get": {
+                      "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                      "operationId": "getMyModel",
+                      "responses": {
+                        "200": {
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/components/schemas/myModel"
+                              }
+                            }
+                          },
+                          "description": "search results matching criteria"
+                        },
+                        "400": {
+                          "description": "bad input parameter"
+                        }
+                      },
+                      "summary": "searches inventory",
+                      "tags": [
+                        "developers"
+                      ]
+                    }
+                  },
+                  "/getOtherModel": {
+                    "get": {
+                      "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                      "operationId": "getOtherModel",
+                      "responses": {
+                        "200": {
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/components/schemas/otherModel"
+                              }
+                            }
+                          },
+                          "description": "search results matching criteria"
+                        },
+                        "400": {
+                          "description": "bad input parameter"
+                        }
+                      },
+                      "summary": "searches inventory",
+                      "tags": [
+                        "developers"
+                      ]
+                    }
+                  }
+                },
+                "servers": [
+                  {
+                    "description": "SwaggerHub API Auto Mocking",
+                    "url": "https://virtserver.swaggerhub.com/CANDYG24/allOfExample/1.0.0"
+                  }
+                ],
+                "tags": [
+                  {
+                    "description": "Secured Admin-only calls",
+                    "name": "admins"
+                  },
+                  {
+                    "description": "Operations available to regular developers",
+                    "name": "developers"
+                  }
+                ]
+              }
+            },
+            "pact": {
+              "content": {
+                "consumer": {
+                  "name": "ExampleConsumer"
+                },
+                "interactions": [
+                  {
+                    "description": "a request for myModel",
+                    "request": {
+                      "method": "GET",
+                      "path": "/getNotMyModel"
+                    },
+                    "response": {
+                      "body": {
+                        "optionalData": {
+                          "data": "string"
+                        },
+                        "optionalString": "string"
+                      },
+                      "headers": {
+                        "Content-Type": [
+                          "application/json"
+                        ]
+                      },
+                      "status": 200
+                    }
+                  },
+                  {
+                    "description": "a request to get otherModel",
+                    "request": {
+                      "method": "GET",
+                      "path": "/getOtherModel"
+                    },
+                    "response": {
+                      "body": {
+                        "requiredData": {
+                          "data": "child model data"
+                        },
+                        "requiredString": "string"
+                      },
+                      "headers": {
+                        "Content-Type": "application/json; charset=utf-8"
+                      },
+                      "status": 200
+                    }
+                  }
+                ],
+                "metadata": {
+                  "pactRust": {
+                    "ffi": "0.2.1",
+                    "mockserver": "0.8.7",
+                    "models": "0.2.7"
+                  },
+                  "pactSpecification": {
+                    "version": "3.0.0"
+                  }
+                },
+                "provider": {
+                  "name": "ExampleProvider"
+                }
+              }
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "content-type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "consumer": "ExampleConsumer",
+            "errors": [
+              {
+                "code": "request.path-or-method.unknown",
+                "message": "Path or method not defined in spec file: GET /getNotMyModel",
+                "mockDetails": {
+                  "interactionDescription": "a request for myModel",
+                  "interactionState": "[none]",
+                  "location": "[root].interactions[0].request.path",
+                  "mockFile": "content",
+                  "value": "/getNotMyModel"
+                },
+                "source": "spec-mock-validation",
+                "specDetails": {
+                  "location": "[root].paths",
+                  "pathMethod": null,
+                  "pathName": null,
+                  "specFile": "content",
+                  "value": {
+                    "/getMyModel": {
+                      "get": {
+                        "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                        "operationId": "getMyModel",
+                        "responses": {
+                          "200": {
+                            "content": {
+                              "application/json": {
+                                "schema": {
+                                  "properties": {
+                                    "optionalData": {
+                                      "description": "optional data",
+                                      "nullable": true,
+                                      "properties": {
+                                        "data": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "type": "object"
+                                    },
+                                    "optionalString": {
+                                      "description": "optional string",
+                                      "nullable": true,
+                                      "type": "string"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "description": "search results matching criteria"
+                          },
+                          "400": {
+                            "description": "bad input parameter"
+                          }
+                        },
+                        "summary": "searches inventory",
+                        "tags": [
+                          "developers"
+                        ]
+                      }
+                    },
+                    "/getOtherModel": {
+                      "get": {
+                        "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                        "operationId": "getOtherModel",
+                        "responses": {
+                          "200": {
+                            "content": {
+                              "application/json": {
+                                "schema": {
+                                  "properties": {
+                                    "requiredData": {
+                                      "description": "required data",
+                                      "nullable": true,
+                                      "properties": {
+                                        "data": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "type": "object"
+                                    },
+                                    "requiredString": {
+                                      "description": "required data",
+                                      "type": "string"
+                                    }
+                                  },
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "description": "search results matching criteria"
+                          },
+                          "400": {
+                            "description": "bad input parameter"
+                          }
+                        },
+                        "summary": "searches inventory",
+                        "tags": [
+                          "developers"
+                        ]
+                      }
+                    }
+                  }
+                },
+                "type": "error"
+              }
+            ],
+            "failureReason": "Mock file \"content\" is not compatible with spec file \"content\"",
+            "mockContentPathOrUrl": "content",
+            "provider": "ExampleProvider",
+            "specContentPathOrUrl": "content",
+            "success": false,
+            "warnings": []
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    },
+    {
+      "description": "an HTTP request that exists in the OpenAPI definition",
+      "key": "c17de5674c17d973",
+      "pending": false,
+      "providerStates": [
+        {
+          "name": "an OpenAPI definition exists"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": {
+            "oas": {
+              "content": {
+                "components": {
+                  "schemas": {
+                    "childModel": {
+                      "description": "<description generated from the ChildModel class definition, eg if OpenApiPropertyAnnotation were allowed on classes>",
+                      "nullable": true,
+                      "properties": {
+                        "data": {
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "myModel": {
+                      "properties": {
+                        "optionalData": {
+                          "description": "optional data",
+                          "nullable": true,
+                          "properties": {
+                            "data": {
+                              "type": "string"
+                            }
+                          },
+                          "type": "object"
+                        },
+                        "optionalString": {
+                          "description": "optional string",
+                          "nullable": true,
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    },
+                    "otherModel": {
+                      "properties": {
+                        "requiredData": {
+                          "allOf": [
+                            {
+                              "$ref": "#/components/schemas/childModel"
+                            }
+                          ],
+                          "description": "required data"
+                        },
+                        "requiredString": {
+                          "description": "required data",
+                          "type": "string"
+                        }
+                      },
+                      "type": "object"
+                    }
+                  }
+                },
+                "info": {
+                  "contact": {
+                    "email": "you@your-company.com"
+                  },
+                  "description": "This is a simple API",
+                  "license": {
+                    "name": "Apache 2.0",
+                    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+                  },
+                  "title": "Simple Inventory API",
+                  "version": "1.0.0"
+                },
+                "openapi": "3.0.0",
+                "paths": {
+                  "/getMyModel": {
+                    "get": {
+                      "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                      "operationId": "getMyModel",
+                      "responses": {
+                        "200": {
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/components/schemas/myModel"
+                              }
+                            }
+                          },
+                          "description": "search results matching criteria"
+                        },
+                        "400": {
+                          "description": "bad input parameter"
+                        }
+                      },
+                      "summary": "searches inventory",
+                      "tags": [
+                        "developers"
+                      ]
+                    }
+                  },
+                  "/getOtherModel": {
+                    "get": {
+                      "description": "By passing in the appropriate options, you can search for\navailable inventory in the system\n",
+                      "operationId": "getOtherModel",
+                      "responses": {
+                        "200": {
+                          "content": {
+                            "application/json": {
+                              "schema": {
+                                "$ref": "#/components/schemas/otherModel"
+                              }
+                            }
+                          },
+                          "description": "search results matching criteria"
+                        },
+                        "400": {
+                          "description": "bad input parameter"
+                        }
+                      },
+                      "summary": "searches inventory",
+                      "tags": [
+                        "developers"
+                      ]
+                    }
+                  }
+                },
+                "servers": [
+                  {
+                    "description": "SwaggerHub API Auto Mocking",
+                    "url": "https://virtserver.swaggerhub.com/CANDYG24/allOfExample/1.0.0"
+                  }
+                ],
+                "tags": [
+                  {
+                    "description": "Secured Admin-only calls",
+                    "name": "admins"
+                  },
+                  {
+                    "description": "Operations available to regular developers",
+                    "name": "developers"
+                  }
+                ]
+              }
+            },
+            "pact": {
+              "content": {
+                "consumer": {
+                  "name": "ExampleConsumer"
+                },
+                "interactions": [
+                  {
+                    "description": "a request for myModel",
+                    "request": {
+                      "method": "GET",
+                      "path": "/getMyModel"
+                    },
+                    "response": {
+                      "body": {
+                        "optionalData": {
+                          "data": "string"
+                        },
+                        "optionalString": "string"
+                      },
+                      "headers": {
+                        "Content-Type": [
+                          "application/json"
+                        ]
+                      },
+                      "status": 200
+                    }
+                  },
+                  {
+                    "description": "a request to get otherModel",
+                    "request": {
+                      "method": "GET",
+                      "path": "/getOtherModel"
+                    },
+                    "response": {
+                      "body": {
+                        "requiredData": {
+                          "data": "child model data"
+                        },
+                        "requiredString": "string"
+                      },
+                      "headers": {
+                        "Content-Type": "application/json; charset=utf-8"
+                      },
+                      "status": 200
+                    }
+                  }
+                ],
+                "metadata": {
+                  "pactRust": {
+                    "ffi": "0.2.1",
+                    "mockserver": "0.8.7",
+                    "models": "0.2.7"
+                  },
+                  "pactSpecification": {
+                    "version": "3.0.0"
+                  }
+                },
+                "provider": {
+                  "name": "ExampleProvider"
+                }
+              }
+            }
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "content-type": [
+            "application/json"
+          ]
+        },
+        "method": "POST",
+        "path": "/"
+      },
+      "response": {
+        "body": {
+          "content": {
+            "consumer": "ExampleConsumer",
+            "errors": [],
+            "mockContentPathOrUrl": "content",
+            "provider": "ExampleProvider",
+            "specContentPathOrUrl": "content",
+            "success": true,
+            "warnings": []
+          },
+          "contentType": "application/json",
+          "encoded": false
+        },
+        "headers": {
+          "Content-Type": [
+            "application/json"
+          ]
+        },
+        "status": 200
+      },
+      "transport": "http",
+      "type": "Synchronous/HTTP"
+    }
+  ],
+  "metadata": {
+    "pact-deno-ffi": {
+      "ffi": "0.3.15"
+    },
+    "pactRust": {
+      "ffi": "0.3.15",
+      "mockserver": "0.9.6",
+      "models": "1.0.1"
+    },
+    "pactSpecification": {
+      "version": "4.0"
+    }
+  },
+  "provider": {
+    "name": "swagger-mock-validator-provider"
+  }
+}
