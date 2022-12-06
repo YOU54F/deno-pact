@@ -4,7 +4,6 @@ import { DenoPact } from "../denoPact.ts";
 import { PactFfi as Pact } from "../lib/types.ts";
 import { getShapeMessage } from "./areaCalculator/areaCalculatorClient.ts";
 import { getModuleDir } from "../lib/utils.ts";
-import { assertExists } from "https://deno.land/std@0.93.0/testing/asserts.ts";
 const protoPath = path.join(
   getModuleDir(import.meta),
   "areaCalculator",

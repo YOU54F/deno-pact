@@ -4,16 +4,20 @@ import { swaggerMockValidatorService } from "./swaggerMockValidatorService.ts";
 const app = express();
 app.use(express.json());
 export const server = (port: number) => {
-  return app.listen(port);
+  console.log("listening on: ", port);
+  const server = app.listen(port);
+  return server;
 };
 
-app.post("/", async (req:any,res:any) => {
-  console.log(req.body);
-  const results = await swaggerMockValidatorService(req.body);
-  res.send(results);
+app.post("/", async (req: any, res: any) => {
+  console.log("got a req");
+  const { body } = req;
+  console.log("got a body", body);
+  const results = await swaggerMockValidatorService(body);
+  res.json(JSON.parse(results));
 });
 
-// deno run -A --unstable pact/usage/areaCalculator/areaCalculatorClient.ts --run --port 37757
+// deno run -A --unstable <path> --run --port 37757
 import { parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
 const flags = parse(Deno.args, {
   boolean: ["run"],
