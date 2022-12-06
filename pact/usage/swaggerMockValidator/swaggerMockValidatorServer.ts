@@ -1,15 +1,10 @@
-import express from "npm:express@4.18.2";
+import express, { Request, Response } from "npm:express";
 import { swaggerMockValidatorService } from "./swaggerMockValidatorService.ts";
 
-const app = express();
+export const app = express();
 app.use(express.json());
-export const server = (port: number) => {
-  console.log("listening on: ", port);
-  const server = app.listen(port);
-  return server;
-};
 
-app.post("/", async (req: any, res: any) => {
+app.post("/", async (req: Request, res: Response) => {
   console.log("got a req");
   const { body } = req;
   console.log("got a body", body);
@@ -17,7 +12,14 @@ app.post("/", async (req: any, res: any) => {
   res.json(JSON.parse(results));
 });
 
-// deno run -A --unstable <path> --run --port 37757
+export const server = (port: number) => {
+  const server = app.listen(port, () => {
+    console.log("listening on: ", server.address());
+  });
+  return server;
+};
+
+// deno run -A --unstable <path> --run --port 3000
 import { parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
 const flags = parse(Deno.args, {
   boolean: ["run"],
@@ -27,6 +29,6 @@ if (flags.run) {
   if (flags.port) {
     server(flags.port);
   } else {
-    server(8000);
+    server(3000);
   }
 }

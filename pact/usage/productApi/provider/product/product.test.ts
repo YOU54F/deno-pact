@@ -19,7 +19,7 @@ describe("Product API tests", () => {
   });
 
   describe("All products", () => {
-    it.only("Returns all products", async () => {
+    it("Returns all products", async () => {
       const expected = [
         {
           id: "09",
@@ -60,7 +60,7 @@ describe("Product API tests", () => {
 
 
   });
-  describe("Individual products", () => {
+  describe.skip("Individual products", () => {
  
     // There is an async leak when run via act CI locally.
     // no issues running from my local machine
