@@ -10,11 +10,11 @@ export class ProductRepository {
     ]);
   }
 
-  async fetchAll() {
+   fetchAll() {
     return [...this.products.values()];
   }
 
-  async getById(id: number) {
+   getById(id: number) {
     return this.products.get(id);
   }
 }

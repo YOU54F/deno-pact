@@ -1,29 +1,25 @@
 import { express } from "../deps.ts";
 import { router } from "./product.routes.ts";
 import {
-  beforeEach,
-  afterEach,
+  beforeAll,
+  afterAll,
   describe,
   expect,
   it,
   run
 } from "https://deno.land/x/tincan/mod.ts";
+import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 
 describe("Product API tests", () => {
-  let server: any;
+  const app = express();
 
-  beforeEach(() => {
-    const app = express();
+  beforeAll(() => {
     app.use(express.json());
     app.use(router);
-    server = app.listen(3000);
-  });
-  afterEach(() => {
-    server.close();
   });
 
-  describe("Happy path", () => {
-    it("Returns all products", async () => {
+  describe("All products", () => {
+    it.only("Returns all products", async () => {
       const expected = [
         {
           id: "09",
@@ -44,16 +40,30 @@ describe("Product API tests", () => {
           version: "v2"
         }
       ];
-      const response = await fetch("http://localhost:3000/products");
-      const actual = await response.json();
-      console.log("response", { actual, expected });
-      expect(actual).toEqual(expected);
-      expect(response.status).toEqual(200);
-      expect(response.headers.get("content-type")).toEqual(
-        "application/json; charset=utf-8"
-      );
+      const port = await getAvailablePort();
+      const server = app.listen(port);
+      try {
+        const response = await fetch(`http://localhost:${port}/products`);
+        const actual = await response.json();
+        server.close();
+        const { headers, status } = response;
+        console.log("response", { actual, expected, status, headers });
+        expect(actual).toEqual(expected);
+        expect(status).toEqual(200);
+        expect(headers.get("content-type")).toEqual(
+          "application/json; charset=utf-8"
+        );
+      } finally {
+        server.close();
+      }
     });
 
+
+  });
+  describe("Individual products", () => {
+ 
+    // There is an async leak when run via act CI locally.
+    // no issues running from my local machine
     it("Returns product by id", async () => {
       const expected = {
         id: "09",
@@ -61,14 +71,22 @@ describe("Product API tests", () => {
         name: "Gem Visa",
         version: "v1"
       };
-      const response = await fetch("http://localhost:3000/product/9");
-      const actual = await response.json();
-      console.log("response", { actual, expected });
-      expect(actual).toEqual(expected);
-      expect(response.status).toEqual(200);
-      expect(response.headers.get("content-type")).toEqual(
-        "application/json; charset=utf-8"
-      );
+      const port = await getAvailablePort();
+      const server = app.listen(port);
+      try {
+        const response = await fetch(`http://localhost:${port}/product/9`);
+        const actual = await response.json();
+        server.close();
+        const { headers, status } = response;
+        console.log("response", { actual, expected, status, headers });
+        expect(actual).toEqual(expected);
+        expect(status).toEqual(200);
+        expect(headers.get("content-type")).toEqual(
+          "application/json; charset=utf-8"
+        );
+      } finally {
+        server.close();
+      }
     });
   });
 });

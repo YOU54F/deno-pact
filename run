@@ -54,13 +54,26 @@ run_grpc_greeter)
 run_product_api_provider)
     $denor pact/usage/productApi/provider/server.ts
     ;;
-#CMD - run_product_api_provider
+#CMD - test_product_api_provider
 test_product_api_provider)
     $denot pact/usage/productApi/provider/product/product.test.ts
     ;;
-#CMD - test_smv_service
-test_smv_service)
+#CMD - run_smv_service
+run_smv_service)
+    $denor pact/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000
+    ;;
+#CMD - test_smv_service_provider_integration
+test_smv_service_provider_integration)
     $denot pact/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts
+    ;;
+#CMD - test_smv_service_consumer_pact
+test_smv_service_consumer_pact)
+    $denot pact/usage/swaggerMockValidator/swaggerMockValidatorServer.consumer.pact.ts
+    ;;
+#CMD - test_smv_service_provider_pact
+test_smv_service_provider_pact)
+    $denor pact/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000 & _pid=$!;
+    sleep 3 && $denot pact/usage/swaggerMockValidator/swaggerMockValidatorServer.provider.pact.ts  ;kill $_pid
     ;;
 #CMD - act
 act)
@@ -72,6 +85,10 @@ all)
     ./run test_grpc_greeter_client
     ./run run_area_calculator
     ./run run_grpc_greeter
+    ./run test_product_api_provider
+    ./run test_smv_service_provider_integration
+    ./run test_smv_service_consumer_pact
+    ./run test_smv_service_provider_pact
     ;;
 * | help)
     echo "available commands"
