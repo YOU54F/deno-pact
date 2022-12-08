@@ -32,8 +32,7 @@ await downloadFfiForPlatform()
 ## How to use
 
 ```ts
-import { DenoPact } from "https://deno.land/x/pact/src/mod.ts";
-import { PactFfi as Pact } from "https://deno.land/x/pact/src/mod.ts";
+import { DenoPact, Pact } from "https://deno.land/x/pact/src/mod.ts";
 const denoPact = new DenoPact();
 ```
 

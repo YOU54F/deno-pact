@@ -1,6 +1,6 @@
-export { DenoPact } from "./denoPact.ts";
-export { getModuleDir } from "./lib/utils.ts";
-export { PactFfi as Pact } from "./lib/types.ts";
+export { DenoPact } from "./mod.ts";
+export { getModuleDir } from "./mod.ts";
+export { Pact } from "./mod.ts";
 
 export { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 export { isPortAvailableSync } from "https://deno.land/x/port/mod.ts";
