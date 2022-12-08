@@ -1,8 +1,12 @@
-import { DenoPact } from "../denoPact.ts";
-import { PactFfi as Pact } from "../lib/types.ts";
-import { describe, it, run } from "https://deno.land/x/tincan/mod.ts";
-import { isPortAvailableSync } from "https://deno.land/x/port/mod.ts";
-import * as path from "https://deno.land/std/path/mod.ts";
+import { describe, it, run } from "../deps.test.ts";
+
+import {
+  DenoPact,
+  Pact,
+  path,
+  isPortAvailableSync
+} from "../deps.dev.ts";
+// } from "../deps.ts";
 
 describe("Pact Verifier", () => {
   describe("Validations", () => {

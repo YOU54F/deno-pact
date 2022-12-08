@@ -1,14 +1,13 @@
-import { getModuleDir } from "../../lib/utils.ts";
-import * as path from "https://deno.land/std/path/mod.ts";
-import { DenoPact } from "../../denoPact.ts";
-import { PactFfi as Pact } from "../../lib/types.ts";
+import { describe, it, run, beforeEach,expect  } from "../../deps.test.ts";
+
 import {
-  beforeEach,
-  describe,
-  expect,
-  it,
-  run
-} from "https://deno.land/x/tincan/mod.ts";
+  DenoPact,
+  Pact,
+  getModuleDir,
+  path,
+} from "../../deps.dev.ts";
+// } from "../../deps.ts";
+
 const decoder = new TextDecoder("utf-8");
 
 describe("Swagger Mock Validator Service", () => {

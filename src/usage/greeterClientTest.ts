@@ -1,9 +1,14 @@
-import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import * as path from "https://deno.land/std/path/mod.ts";
-import { DenoPact } from "../denoPact.ts";
-import { PactFfi as Pact } from "../lib/types.ts";
+import {
+  DenoPact,
+  Pact,
+  getModuleDir,
+  assertEquals,
+  path,
+} from "../deps.dev.ts";
+// } from "../deps.ts";
+
 import { sayHello } from "./greeter/greeterClient.ts";
-import { getModuleDir } from "../lib/utils.ts";
+
 const protoPath = path.join(
   getModuleDir(import.meta),
   "greeter",

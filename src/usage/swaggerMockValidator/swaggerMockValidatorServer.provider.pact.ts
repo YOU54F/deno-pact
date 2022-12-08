@@ -1,7 +1,8 @@
-import { DenoPact } from "../../denoPact.ts";
-import { PactFfi as Pact } from "../../lib/types.ts";
-import { describe, it, run } from "https://deno.land/x/tincan/mod.ts";
-import { isPortAvailableSync } from "https://deno.land/x/port/mod.ts";
+import { describe, it, run } from "../../deps.test.ts";
+
+import { DenoPact, Pact, isPortAvailableSync } from "../../deps.dev.ts";
+// } from "../../deps.ts";
+
 describe("Verify Swagger Mock Validator Service with pact", () => {
   describe("Validations", () => {
     it("should return ok if there are no errors", () => {

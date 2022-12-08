@@ -25,15 +25,15 @@ You can also do this in code
 
 
 ```ts
-import { downloadFfiForPlatform } from "downloadFfi.ts";
+import { downloadFfiForPlatform } from "https://deno.land/x/pact/src/mod.ts";
 await downloadFfiForPlatform()
 ```
 
 ## How to use
 
 ```ts
-import { DenoPact } from "DenoPact.ts";
-import { PactFfi as Pact } from "types.ts";
+import { DenoPact } from "https://deno.land/x/pact/src/mod.ts";
+import { PactFfi as Pact } from "https://deno.land/x/pact/src/mod.ts";
 const denoPact = new DenoPact();
 ```
 
@@ -61,7 +61,7 @@ Try `./run help` for available commands or take a look at the [run](./run) scrip
 ### HTTP service - Swagger Mock Validator
 
 - The Service - [swaggerMockValidatorService.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorService.ts)
-- The Service Unit Test - [swaggerMockValidatorService..test.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts)
+- The Service Unit Test - [swaggerMockValidatorService.test.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts)
 - The Server - [swaggerMockValidatorServer.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.ts)
 - The Server Integration Test - [swaggerMockValidatorServer.test.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.test.ts)
 - The Client Pact test [swaggerMockValidatorServer.consumer.pact.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.consumer.pact.ts)
