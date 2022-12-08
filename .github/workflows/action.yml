@@ -31,5 +31,10 @@ jobs:
           deno-version: v1.x
       - run: ./run get_pact_ffi
       - run: ./run get_pact_plugin_cli
-      - run: /root/bin/pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
+      - run: PATH_TO_CLI=/home/runner/bin/ ./run get_protobuf_plugin
+        if: runner.os == 'Linux'
+      - run: PATH_TO_CLI=/Users/runner/bin/ ./run get_protobuf_plugin 
+        if: runner.os == 'macOS'
+      - run: ./run get_protobuf_plugin 
+        if: runner.os == 'Windows'
       - run: ./run all

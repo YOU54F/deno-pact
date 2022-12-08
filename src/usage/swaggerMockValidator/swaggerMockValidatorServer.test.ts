@@ -1,6 +1,6 @@
 import { getModuleDir } from "../../lib/utils.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
-import express from "npm:express@4.18.2";
+import express from "npm:express";
 import { server as swaggerMockValidatorServer } from "./swaggerMockValidatorServer.ts";
 import {
   beforeEach,

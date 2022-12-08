@@ -132,7 +132,9 @@ const flags = parse(Deno.args, {
 });
 if (flags.run) {
   await downloadFfiForPlatform().then(() => {
-    console.log(new DenoPact().getPactFfiVersion());
+    if (Deno.build.os !== "windows") {
+      console.log(new DenoPact().getPactFfiVersion());
+    }
   });
 }
 

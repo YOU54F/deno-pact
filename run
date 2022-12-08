@@ -18,14 +18,14 @@ esac
 
 denor="deno run -A --unstable"
 denot="deno test -A --unstable"
-
 case "$1" in
 #CMD - get_pact_ffi
 get_pact_ffi)
     $denor src/downloadFfi.ts --run
     ;;
+#CMD - get_broker
 get_broker)
-    $denor docker/pactBroker.ts --run
+    $denor docker/pactBroker.ts
     ;;
 #CMD - get_pact_plugin_cli
 get_pact_plugin_cli)
@@ -33,7 +33,7 @@ get_pact_plugin_cli)
     ;;
 #CMD - get_protobuf_plugin
 get_protobuf_plugin)
-    pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
+    ${PATH_TO_CLI}pact-plugin-cli -y install https://github.com/pactflow/pact-protobuf-plugin/releases/latest
     ;;
 #CMD - test_grpc_area_client
 test_grpc_area_client)

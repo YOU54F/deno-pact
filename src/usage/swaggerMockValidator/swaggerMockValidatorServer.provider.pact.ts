@@ -1,4 +1,3 @@
-// import express from "npm:express@4.18.2";
 import { DenoPact } from "../../denoPact.ts";
 import { PactFfi as Pact } from "../../lib/types.ts";
 import { describe, it, run } from "https://deno.land/x/tincan/mod.ts";
