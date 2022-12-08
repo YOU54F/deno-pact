@@ -2,7 +2,12 @@ import { ensureFile } from "https://deno.land/std/fs/ensure_file.ts";
 import { gunzipFile } from "https://deno.land/x/compress@v0.4.4/gzip/mod.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
-import { libraryFilename, DenoPact, PACT_FFI_LOCATION, PACT_FFI_VERSION } from "./denoPact.ts";
+import {
+  libraryFilename,
+  DenoPact,
+  PACT_FFI_LOCATION,
+  PACT_FFI_VERSION
+} from "./denoPact.ts";
 
 async function downloadFile(src: string, dest: string) {
   if (!(src.startsWith("http://") || src.startsWith("https://"))) {
@@ -59,28 +64,35 @@ export const detectFfiDownloadForPlatform = (ffiVersion = PACT_FFI_VERSION) => {
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
 
+export const downloadFileAndExtract = async (args: {
+  fileLocation: string;
+  pathToWrite: string;
+}) => {
+  const { fileLocation, pathToWrite } = args;
+  await downloadFile(fileLocation, path.join(pathToWrite, "tmp.gz"));
+  await gunzipFile(
+    path.join(pathToWrite, "tmp.gz"),
+    path.join(pathToWrite, libraryFilename)
+  );
+  Deno.removeSync(path.join(pathToWrite, "tmp.gz"));
+  const fileNames: string[] = [];
+  for await (const dirEntry of Deno.readDir(pathToWrite)) {
+    if (dirEntry.isFile) {
+      fileNames.push(dirEntry.name);
+    }
+  }
+  console.log(fileNames);
+};
+
 export const downloadFfiForPlatform = async (ffiVersion = PACT_FFI_VERSION) => {
   const locs = detectFfiDownloadForPlatform(ffiVersion);
   const exists = await checkIfFfiExists(libraryFilename);
   if (!exists.pactFfiLib) {
     console.log("downloading", locs.ffiLibDownloadLocation);
-    await downloadFile(
-      locs.ffiLibDownloadLocation,
-      path.join(PACT_FFI_LOCATION, "libpact_ffi.gz")
-    );
-    console.log("extracting", libraryFilename);
-    await gunzipFile(
-      path.join(PACT_FFI_LOCATION, "libpact_ffi.gz"),
-      path.join(PACT_FFI_LOCATION, libraryFilename)
-    );
-    Deno.removeSync(path.join(PACT_FFI_LOCATION, "libpact_ffi.gz"));
-    const fileNames: string[] = [];
-    for await (const dirEntry of Deno.readDir(PACT_FFI_LOCATION)) {
-      if (dirEntry.isFile) {
-        fileNames.push(dirEntry.name);
-      }
-    }
-    console.log(fileNames);
+    await downloadFileAndExtract({
+      fileLocation: locs.ffiLibDownloadLocation,
+      pathToWrite: PACT_FFI_LOCATION
+    });
   } else {
     console.log("pact ffi library exists");
   }
@@ -115,12 +127,44 @@ const checkIfFfiExists = async (libraryFilename: string) => {
   return { pactFfiLib, pactFfiHeaders };
 };
 
-
 const flags = parse(Deno.args, {
-  boolean: ["run"]
+  boolean: ["run", "cli"]
 });
 if (flags.run) {
   await downloadFfiForPlatform().then(() => {
     console.log(new DenoPact().getPactFfiVersion());
   });
 }
+
+export const detectStandaloneCliDownloadForPlatform = (
+  ffiVersion = PACT_FFI_VERSION
+) => {
+  const platform = Deno.build.os + "-" + Deno.build.arch;
+  console.log(platform);
+  let filename;
+  switch (platform) {
+    case "darwin-aarch64":
+      filename = "libpact_ffi-osx-aarch64-apple-darwin.dylib.gz";
+      break;
+    case "darwin-x86_64":
+      filename = "libpact_ffi-osx-x86_64.dylib.gz";
+      break;
+    case "linux-aarch64":
+      filename = "libpact_ffi-linux-aarch64.so.gz";
+      break;
+    case "linux-x86_64":
+      filename = "libpact_ffi-linux-x86_64.so.gz";
+      break;
+    default:
+      if (platform.includes("windows")) {
+        filename = "pact_ffi-windows-x86_64.dll.gz";
+        break;
+      }
+      `We do not have a binary for your platform ${platform}`;
+      break;
+  }
+  const ffiLibDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
+  const ffiHeaderDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
+  console.log(ffiLibDownloadLocation);
+  return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
+};

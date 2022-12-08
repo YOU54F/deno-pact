@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  pact_broker:
+    image: pactfoundation/pact-broker
+    restart: on-failure
+    ports:
+    - "${TENANT_PORT}:9292"
+    links:
+    - pact_db:db
+    depends_on:
+    - pact_db
+    environment:
+      PACT_BROKER_DATABASE_USERNAME: pact
+      PACT_BROKER_DATABASE_PASSWORD: password
+      PACT_BROKER_DATABASE_HOST: db
+      PACT_BROKER_DATABASE_NAME: pact
+      PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES: "10"
+  pact_db:
+    image: postgres:15.0-alpine
+    volumes:
+      - data_volume:/var/lib/postgresql/data
+    healthcheck:
+      test: psql postgres --command "select 1" -U postgres
+    environment:
+      POSTGRES_DB: pact
+      POSTGRES_USER: pact
+      POSTGRES_PASSWORD: password
+volumes:
+  data_volume:
+

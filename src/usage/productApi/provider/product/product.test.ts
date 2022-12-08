@@ -1,19 +1,18 @@
 import { express } from "../deps.ts";
 import { router } from "./product.routes.ts";
 import {
-  beforeAll,
-  afterAll,
   describe,
   expect,
   it,
-  run
+  run,
+  beforeEach
 } from "https://deno.land/x/tincan/mod.ts";
 import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 
 describe("Product API tests", () => {
   const app = express();
 
-  beforeAll(() => {
+  beforeEach(() => {
     app.use(express.json());
     app.use(router);
   });
@@ -57,11 +56,8 @@ describe("Product API tests", () => {
         server.close();
       }
     });
-
-
   });
-  describe.skip("Individual products", () => {
- 
+  describe("Individual products", () => {
     // There is an async leak when run via act CI locally.
     // no issues running from my local machine
     it("Returns product by id", async () => {

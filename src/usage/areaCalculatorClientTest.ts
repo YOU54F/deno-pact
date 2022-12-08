@@ -1,16 +1,14 @@
-// https://deno.land/std@0.158.0/testing/bdd_examples/user_test.ts
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-import * as path from "https://deno.land/std/path/mod.ts";
 import { DenoPact } from "../denoPact.ts";
 import { PactFfi as Pact } from "../lib/types.ts";
-import { sayHello } from "./greeter/greeterClient.ts";
+import { getShapeMessage } from "./areaCalculator/areaCalculatorClient.ts";
+import * as path from "https://deno.land/std/path/mod.ts";
 import { getModuleDir } from "../lib/utils.ts";
 const protoPath = path.join(
   getModuleDir(import.meta),
-  "greeter",
-  "greeter.proto"
+  "areaCalculator",
+  "area_calculator.proto"
 );
-
 Deno.test(
   {
     name: "Greeter/SayHello Unary gRPC test",
@@ -19,30 +17,31 @@ Deno.test(
   },
   async () => {
     const denoPact = new DenoPact();
-
-    const nameToSend = "unary #1";
-    const expectedReply = `hello ${nameToSend}`;
     const pactContents = {
       "pact:proto": protoPath,
-      "pact:proto-service": "Greeter/SayHello",
+      "pact:proto-service": "Calculator/calculateOne",
       "pact:content-type": "application/protobuf",
       request: {
-        name: `matching(type, '${nameToSend}')`
+        rectangle: {
+          length: "matching(number, 3)",
+          width: "matching(number, 4)"
+        }
       },
-      response: { message: `matching(type, '${expectedReply}')` }
+      response: { value: ["matching(number, 12)"] }
     };
     console.log(
-      "🚀 Testing gRPC Greeter Client with Pact Protobuf Plugin  🚀\n",
+      "🚀 Testing gRPC Area Calculator with Pact Protobuf Plugin  🚀\n",
       {
         pactContents
       }
     );
+
     await denoPact
-      .setupLoggers(Pact.LevelFilter.LevelFilter_Info)
+      .setupLoggers()
       // Arrange
-      .newPact("greeter-consumer", "greeter-provider")
+      .newPact("area-calculator-consumer", "area-calculator-provider")
       .addMetaDataToPact(denoPact.getPactFfiVersion())
-      .newSyncMessageInteraction("A gRPC greeter request")
+      .newSyncMessageInteraction("A gRPC calculateOne request")
       .setPactSpecification(Pact.PactSpecification.PactSpecification_V4)
       .usingPactPlugin("protobuf")
       .withInteractionContents(
@@ -51,14 +50,13 @@ Deno.test(
         pactContents
       )
       .createMockServerForTransport("grpc")
-      .executeTest(async function (): Promise<void> {
-        const expected = expectedReply;
+      .executeTest(async () => {
+        const expected = [12];
         // Act
         const mockServerPort = denoPact.getMockServerPort();
-        const results = await sayHello(mockServerPort);
-        console.log(results);
+        const results = await getShapeMessage(mockServerPort);
         // Assert
-        assertEquals(results.message, expected);
+        assertEquals(results.value, expected);
       })
       .then((results) => console.log(results));
   }

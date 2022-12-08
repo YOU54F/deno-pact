@@ -3,7 +3,7 @@ import * as path from "https://deno.land/std/path/mod.ts";
 import { DenoPact } from "../../denoPact.ts";
 import { PactFfi as Pact } from "../../lib/types.ts";
 import {
-  beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
@@ -15,7 +15,7 @@ describe("Swagger Mock Validator Service", () => {
   let oasDefinition: any;
   let pactFile: any;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     oasDefinition = JSON.parse(
       decoder.decode(
         await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
@@ -99,7 +99,6 @@ describe("Swagger Mock Validator Service", () => {
           expect(actual).toEqual(expected);
         })
         .then((results) => console.log(results));
-      denoPact.pactFfi().$$close();
     });
     it("should return report on errors", async () => {
       pactFile.interactions[0].request.path = "/getNotMyModel";
@@ -171,8 +170,8 @@ describe("Swagger Mock Validator Service", () => {
           expect(actual).toEqual(expected);
         })
         .then((results) => console.log(results));
-      denoPact.pactFfi().$$close();
-    });
+    }
+   );
   });
 });
 

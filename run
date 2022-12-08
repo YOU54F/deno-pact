@@ -22,7 +22,10 @@ denot="deno test -A --unstable"
 case "$1" in
 #CMD - get_pact_ffi
 get_pact_ffi)
-    $denor pact/downloadFfi.ts --run
+    $denor src/downloadFfi.ts --run
+    ;;
+get_broker)
+    $denor docker/pactBroker.ts --run
     ;;
 #CMD - get_pact_plugin_cli
 get_pact_plugin_cli)
@@ -34,46 +37,61 @@ get_protobuf_plugin)
     ;;
 #CMD - test_grpc_area_client
 test_grpc_area_client)
-    $denot pact/usage/areaCalculatorClientTest.ts
+    $denot src/usage/areaCalculatorClientTest.ts
+    ;;
+#CMD - test_grpc_area_provider
+test_grpc_area_provider)
+    $denor src/usage/areaCalculator/areaCalculatorServer.ts --run --port 3000 & _pid=$!;
+    sleep 3 && $denot src/usage/areaCalculatorProviderTest.ts  ;kill $_pid
     ;;
 #CMD - test_grpc_greeter_client
 test_grpc_greeter_client)
-    $denot pact/usage/greeterClientTest.ts
+    $denot src/usage/greeterClientTest.ts
+    ;;
+#CMD - start_area_calculator_provider
+start_area_calculator_provider)
+    $denor src/usage/areaCalculator/areaCalculatorServer.ts
     ;;
 #CMD - run_area_calculator
 run_area_calculator)
-    $denor pact/usage/areaCalculator/areaCalculatorServer.ts & _pid=$!;
-    sleep 3 && $denor pact/usage/areaCalculator/areaCalculatorClient.ts --run ;kill $_pid
+    $denor src/usage/areaCalculator/areaCalculatorServer.ts & _pid=$!;
+    sleep 3 && $denor src/usage/areaCalculator/areaCalculatorClient.ts --run ;kill $_pid
     ;;
 #CMD - run_grpc_greeter
 run_grpc_greeter)
-    $denor pact/usage/greeter/greeterServer.ts & _pid=$!;
-    sleep 3 && $denor pact/usage/greeter/greeterClient.ts --run ;kill $_pid
+    $denor src/usage/greeter/greeterServer.ts & _pid=$!;
+    sleep 3 && $denor src/usage/greeter/greeterClient.ts --run ;kill $_pid
     ;;
 #CMD - run_product_api_provider
 run_product_api_provider)
-    $denor pact/usage/productApi/provider/server.ts
+    $denor src/usage/productApi/provider/server.ts
     ;;
 #CMD - test_product_api_provider
 test_product_api_provider)
-    $denot pact/usage/productApi/provider/product/product.test.ts
+    $denot src/usage/productApi/provider/product/product.test.ts
     ;;
 #CMD - run_smv_service
 run_smv_service)
-    $denor pact/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000
+    $denor src/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000
     ;;
 #CMD - test_smv_service_provider_integration
 test_smv_service_provider_integration)
-    $denot pact/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts
+    $denot src/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts
     ;;
 #CMD - test_smv_service_consumer_pact
 test_smv_service_consumer_pact)
-    $denot pact/usage/swaggerMockValidator/swaggerMockValidatorServer.consumer.pact.ts
+    $denot src/usage/swaggerMockValidator/swaggerMockValidatorServer.consumer.pact.ts
     ;;
 #CMD - test_smv_service_provider_pact
 test_smv_service_provider_pact)
-    $denor pact/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000 & _pid=$!;
-    sleep 3 && $denot pact/usage/swaggerMockValidator/swaggerMockValidatorServer.provider.pact.ts  ;kill $_pid
+    $denor src/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000 & _pid=$!;
+    sleep 3 && $denot src/usage/swaggerMockValidator/swaggerMockValidatorServer.provider.pact.ts  ;kill $_pid
+    ;;
+#CMD - test_verifier_pact
+test_verifier_pact)
+    $denor src/usage/swaggerMockValidator/swaggerMockValidatorServer.ts --run --port 3000 & _pid1=$!;
+    $denor src/usage/areaCalculator/areaCalculatorServer.ts --run & _pid2=$!;
+    sleep 3 && $denot src/usage/verifier.test.ts  ;kill $_pid1 ;kill $_pid2
     ;;
 #CMD - act
 act)
@@ -81,10 +99,11 @@ act)
     ;;
 #CMD - all
 all)
-    ./run test_grpc_area_client
-    ./run test_grpc_greeter_client
     ./run run_area_calculator
+    ./run test_grpc_area_client
+    ./run test_grpc_area_provider
     ./run run_grpc_greeter
+    ./run test_grpc_greeter_client
     ./run test_product_api_provider
     ./run test_smv_service_provider_integration
     ./run test_smv_service_consumer_pact

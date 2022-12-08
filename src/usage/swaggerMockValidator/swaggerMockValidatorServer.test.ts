@@ -3,7 +3,6 @@ import * as path from "https://deno.land/std/path/mod.ts";
 import express from "npm:express@4.18.2";
 import { server as swaggerMockValidatorServer } from "./swaggerMockValidatorServer.ts";
 import {
-  beforeAll,
   beforeEach,
   afterEach,
   describe,
@@ -18,7 +17,10 @@ describe("Swagger Mock Validator Service", () => {
   let oasDefinition: any;
   let pactFile: any;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    const app = express();
+    app.use(express.json());
+    server = swaggerMockValidatorServer(3000);
     oasDefinition = JSON.parse(
       decoder.decode(
         await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
@@ -31,11 +33,6 @@ describe("Swagger Mock Validator Service", () => {
     );
   });
 
-  beforeEach(() => {
-    const app = express();
-    app.use(express.json());
-    server = swaggerMockValidatorServer(3000);
-  });
   afterEach(() => {
     server.close();
   });

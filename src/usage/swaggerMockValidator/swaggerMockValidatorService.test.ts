@@ -4,7 +4,7 @@ import * as path from "https://deno.land/std/path/mod.ts";
 const decoder = new TextDecoder("utf-8");
 
 import {
-  beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
@@ -15,7 +15,7 @@ describe("Swagger Mock Validator Service", () => {
   let oasDefinition: any;
   let pactFile: any;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
     oasDefinition = JSON.parse(
       decoder.decode(
         await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
