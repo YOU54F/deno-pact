@@ -3,15 +3,10 @@
 
 <img src="https://avatars.githubusercontent.com/u/42048915?s=200&v=4" height="80" width="80"><img src="https://i.pinimg.com/originals/01/9e/e0/019ee012b9ca5318b09d2f5696fc54ee.png" height="80" width="80"><img src="https://user-images.githubusercontent.com/19932401/206557102-f5141b7d-a4f4-441b-84f6-ede3552c4696.png" height="80" width="80">
 
-## Download Pact FFI Library
+## Pre-Reqs
 
-- Checks if it exists in `${HOME}/.pact/ffi/<pact_ffi_version>`
-- Downloads the neccessary library for your architecture
-- Executes the library to ensure it works
+You need to [Download](https://github.com/pact-foundation/pact-reference/releases?q=%22Pact+FFI+Library%22&expanded=true) the [Pact FFI](https://github.com/pact-foundation/pact-reference/tree/master/rust/pact_ffi#pact-ffi) Library for your platform
 
-```sh
-deno run -A --unstable pact/downloadFfi.ts --run
-```
 
 | OS      | Architecture | Supported |
 | ------- | ------------ | --------- |
@@ -21,8 +16,16 @@ deno run -A --unstable pact/downloadFfi.ts --run
 | Linux   | arm          | ✅         |
 | Windows | x86_64       | ✅         |
 
-You can also do this in code
 
+```sh
+deno run -A --unstable https://deno.land/x/pact/src/downloadFfi.ts --run
+```
+
+- Checks if it exists in `${HOME}/.pact/ffi/<pact_ffi_version>`
+- Downloads the necessary library for your architecture
+- Executes the library to ensure it works
+  
+You can also do this in code
 
 ```ts
 import { downloadFfiForPlatform } from "https://deno.land/x/pact/src/mod.ts";
