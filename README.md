@@ -45,14 +45,35 @@ Try `./run help` for available commands or take a look at the [run](./run) scrip
 
 ### gRPC Area Calculator
 
-- [area_calculator.proto](./pact/usage/areaCalculator/area_calculator.proto)
-- [areaCalculatorServer.ts](./pact/usage/areaCalculator/areaCalculatorServer.ts)
-- [areaCalculator/areaCalculatorClient.ts](./pact/usage/areaCalculator/areaCalculatorClient.ts)
-- [areaCalculatorClientTest.ts](./pact/usage/areaCalculatorClientTest.ts)
+- The Proto File - [area_calculator.proto](./src/usage/areaCalculator/area_calculator.proto)
+- The Server - [areaCalculatorServer.ts](./src/usage/areaCalculator/areaCalculatorServer.ts)
+- The Client - [areaCalculator/areaCalculatorClient.ts](./src/usage/areaCalculator/areaCalculatorClient.ts)
+- The Client Pact test [areaCalculatorClientTest.ts](./src/usage/areaCalculatorClientTest.ts)
+- The Server Pact verification [areaCalculatorProviderTest.ts](./src/usage/areaCalculatorProviderTest.ts)
 
 ### gRPC Greeter
 
-- [greeter.proto](./pact/usage/greeter/greeter.proto)
-- [greeterServer.ts](./pact/usage/greeter/greeterServer.ts)
-- [greeterClient.ts](./pact/usage/greeter/greeterClient.ts)
-- [greeterClientTest.ts](./pact/usage/greeterClientTest.ts)
+- The Proto File - [greeter.proto](./src/usage/greeter/greeter.proto)
+- The Server - [greeterServer.ts](./src/usage/greeter/greeterServer.ts)
+- The Client - [greeterClient.ts](./src/usage/greeter/greeterClient.ts)
+- The Client Pact test [greeterClientTest.ts](./src/usage/greeterClientTest.ts)
+
+### HTTP service - Swagger Mock Validator
+
+- The Service - [swaggerMockValidatorService.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorService.ts)
+- The Service Unit Test - [swaggerMockValidatorService..test.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorService.test.ts)
+- The Server - [swaggerMockValidatorServer.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.ts)
+- The Server Integration Test - [swaggerMockValidatorServer.test.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.test.ts)
+- The Client Pact test [swaggerMockValidatorServer.consumer.pact.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.consumer.pact.ts)
+- The Server Pact verification [swaggerMockValidatorServer.provider.pact.ts](./src/usage/swaggerMockValidator/swaggerMockValidatorServer.provider.pact.ts)
+
+### Pact Verifications
+
+- Pact verification task, tests multiple transport protocols [verifier.test.ts](./src/usage/verifier.test.ts)
+
+### Docker
+
+You can spin up various services with Docker to help you play around with the pact files generated, and the examples
+
+- Pact Broker via Deno [pactBroker.ts](./docker/pactBroker.ts)
+- Pact Broker via Docker-Compose [docker-compose.yml](./docker/docker-compose.yml)
