@@ -1,8 +1,8 @@
-// export { DenoPact, getModuleDir, Pact } from "./mod.ts";
+export { DenoPact, getModuleDir, Pact } from "./mod.ts";
 
-// export { assertEquals } from "https://deno.land/std/testing/asserts.ts";
-// export { isPortAvailableSync } from "https://deno.land/x/port/mod.ts";
-// export * as path from "https://deno.land/std/path/mod.ts";
+export { assertEquals } from "https://deno.land/std/testing/asserts.ts";
+export { isPortAvailableSync } from "https://deno.land/x/port/mod.ts";
+export * as path from "https://deno.land/std/path/mod.ts";
 
 // // // Comment the following in, and the above out, to quickly test
 
