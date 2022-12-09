@@ -9,6 +9,7 @@ await build({
   shims: {
     // see JS docs for overview and more options
     deno: true,
+    undici: true,
   },
   package: {
     // package.json properties
