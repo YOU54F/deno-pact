@@ -2,3 +2,4 @@ results.json
 pacts
 .DS_Store
 npm/
+eggs-debug.log

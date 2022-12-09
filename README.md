@@ -42,10 +42,10 @@ const denoPact = new DenoPact();
 
 ### Egg Users
 
-You can install via
+You can install via nest.land. Check the [package](https://nest.land/package/pact) for the latest version
 
-```
-https://x.nest.land/pact.src/mod.ts
+```sh
+import { DenoPact, Pact } from "https://x.nest.land/pact@0.0.6/src/mod.ts"
 ```
 
 ## Examples
