@@ -1,9 +1,9 @@
 import {
-  DenoPact,
-  Pact,
-  getModuleDir,
   assertEquals,
-  path
+  DenoPact,
+  getModuleDir,
+  Pact,
+  path,
 } from "../deps.dev.ts";
 // } from "../deps.ts";
 
@@ -12,13 +12,13 @@ import { getShapeMessage } from "./areaCalculator/areaCalculatorClient.ts";
 const protoPath = path.join(
   getModuleDir(import.meta),
   "areaCalculator",
-  "area_calculator.proto"
+  "area_calculator.proto",
 );
 Deno.test(
   {
     name: "Greeter/SayHello Unary gRPC test",
     sanitizeResources: false,
-    sanitizeOps: false
+    sanitizeOps: false,
   },
   async () => {
     const denoPact = new DenoPact();
@@ -29,16 +29,16 @@ Deno.test(
       request: {
         rectangle: {
           length: "matching(number, 3)",
-          width: "matching(number, 4)"
-        }
+          width: "matching(number, 4)",
+        },
       },
-      response: { value: ["matching(number, 12)"] }
+      response: { value: ["matching(number, 12)"] },
     };
     console.log(
       "🚀 Testing gRPC Area Calculator with Pact Protobuf Plugin  🚀\n",
       {
-        pactContents
-      }
+        pactContents,
+      },
     );
 
     await denoPact
@@ -52,7 +52,7 @@ Deno.test(
       .withInteractionContents(
         Pact.InteractionPart.InteractionPart_Request,
         "application/grpc",
-        pactContents
+        pactContents,
       )
       .createMockServerForTransport("grpc")
       .executeTest(async () => {
@@ -64,5 +64,5 @@ Deno.test(
         assertEquals(results.value, expected);
       })
       .then((results: string) => console.log(results));
-  }
+  },
 );

@@ -1,11 +1,6 @@
 import { describe, it, run } from "../deps.test.ts";
 
-import {
-  DenoPact,
-  Pact,
-  path,
-  isPortAvailableSync
-} from "../deps.dev.ts";
+import { DenoPact, isPortAvailableSync, Pact, path } from "../deps.dev.ts";
 // } from "../deps.ts";
 
 describe("Pact Verifier", () => {
@@ -16,19 +11,17 @@ describe("Pact Verifier", () => {
       const grpcPort = 37757;
       console.log(
         "port avail?",
-        isPortAvailableSync({ port:httpPort, hostname: "localhost" })
+        isPortAvailableSync({ port: httpPort, hostname: "localhost" }),
       );
       const providerName = "area-calculator-provider";
       const providerVersion = "foo-sha-123";
       console.log("🚀 executing verifier");
 
-      // Get yourself a verifier 
+      // Get yourself a verifier
 
       new DenoPact()
         .verifier()
         .setupLoggers(Pact.LevelFilter.LevelFilter_Info)
-
-
         // **** Setup applicable transports
 
         // You can set the provider info for a consumer if they have a single transport
@@ -38,16 +31,13 @@ describe("Pact Verifier", () => {
 
         .verifierSetProviderInfo({
           name: providerName,
-          port: httpPort
+          port: httpPort,
         })
         .verifierAddProviderTransports([
           { protocol: "grpc", port: grpcPort, scheme: "tcp" },
         ])
-
-
-        // **** You could add just provider transports, 
+        // **** You could add just provider transports,
         // and include one for http (regular pact mock verifier)
-
 
         // .verifierAddProviderTransports([
         //   { protocol: "grpc", port: grpcPort, scheme: "tcp" },
@@ -58,18 +48,16 @@ describe("Pact Verifier", () => {
 
         .verifierSetVerificationOptions({
           disableSslVerification: false,
-          requestTime: 5000
+          requestTime: 5000,
         })
-
         // **** Set your publishing opts
 
         .verifierSetPublishOptions({
           providerVersion,
           providerBranch: "main",
           providerTags: ["some", "tags", "yo"],
-          buildUrl: "http://funkyurl.com"
+          buildUrl: "http://funkyurl.com",
         })
-
         // **** You can filter on consumers
 
         // .verifierSetConsumerFilters({ names: ["area-calculator-consumer"] })
@@ -79,11 +67,9 @@ describe("Pact Verifier", () => {
         //   description:'yolo'
         // })
 
-
         // **** Various ways to get pact files
 
         .verifierAddDirectorySource({ pathToDir: pactDir })
-
         // .verifierBrokerSource({
         //   url:"http://localhost:8001"
         // })
@@ -107,7 +93,6 @@ describe("Pact Verifier", () => {
         //   url:
         //     "http://0.0.0.0:8001/pacts/provider/area-calculator-provider/consumer/area-calculator-consumer/latest",
         // })
-
 
         .verifierExecute();
     });

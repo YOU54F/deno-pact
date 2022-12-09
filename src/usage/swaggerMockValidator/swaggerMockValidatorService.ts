@@ -9,14 +9,14 @@ async function mergeAllOfOas(inputContent: string) {
     function mergeAllOfRecursively(
       candidate: any,
       parent: { [x: string]: any },
-      k: string
+      k: string,
     ) {
       if (typeof candidate !== "object") return;
 
       if (candidate && candidate?.allOf) {
         parent[k] = mergeAllOf(candidate, {
           ignoreAdditionalProperties: true,
-          deep: true
+          deep: true,
         });
       } else {
         for (const [key, value] of Object.entries(candidate)) {
@@ -33,14 +33,14 @@ async function mergeAllOfOas(inputContent: string) {
   }
 
   const preprocessedApiSpec = await preprocessOpenapiSpec(
-    JSON.parse(inputContent)
+    JSON.parse(inputContent),
   );
   return JSON.stringify(preprocessedApiSpec);
 }
 
 export const swaggerMockValidatorService = async ({
   oas,
-  pact
+  pact,
 }: {
   oas: any;
   pact: any;
@@ -48,12 +48,12 @@ export const swaggerMockValidatorService = async ({
   const pactData = {
     content: JSON.stringify(pact.content),
     pathOrUrl: "content",
-    format: "auto-detect"
+    format: "auto-detect",
   };
   const specData = {
     content: JSON.stringify(oas.content),
     pathOrUrl: "content",
-    format: "auto-detect"
+    format: "auto-detect",
   };
 
   // Merge allOfs
@@ -62,7 +62,7 @@ export const swaggerMockValidatorService = async ({
   // Perform BDCT validation
   const validationResult = await lib.validate({
     mock: pactData,
-    spec: specData
+    spec: specData,
   });
   const parsedMock = JSON.parse(pactData.content);
   return JSON.stringify({
@@ -70,6 +70,6 @@ export const swaggerMockValidatorService = async ({
     consumer: parsedMock.consumer.name,
     provider: parsedMock.provider.name,
     specContentPathOrUrl: specData.pathOrUrl,
-    mockContentPathOrUrl: pactData.pathOrUrl
+    mockContentPathOrUrl: pactData.pathOrUrl,
   });
 };

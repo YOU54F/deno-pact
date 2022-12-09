@@ -23,7 +23,7 @@ export const server = (port: number) => {
 import { parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
 const flags = parse(Deno.args, {
   boolean: ["run"],
-  string: ["port"]
+  string: ["port"],
 });
 if (flags.run) {
   if (flags.port) {

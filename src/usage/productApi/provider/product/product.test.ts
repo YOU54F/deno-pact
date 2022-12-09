@@ -1,11 +1,11 @@
 import { express } from "../deps.ts";
 import { router } from "./product.routes.ts";
 import {
+  beforeEach,
   describe,
   expect,
   it,
   run,
-  beforeEach
 } from "https://deno.land/x/tincan/mod.ts";
 import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 
@@ -24,20 +24,20 @@ describe("Product API tests", () => {
           id: "09",
           type: "CREDIT_CARD",
           name: "Gem Visa",
-          version: "v1"
+          version: "v1",
         },
         {
           id: "10",
           type: "CREDIT_CARD",
           name: "28 Degrees",
-          version: "v1"
+          version: "v1",
         },
         {
           id: "11",
           type: "PERSONAL_LOAN",
           name: "MyFlexiPay",
-          version: "v2"
-        }
+          version: "v2",
+        },
       ];
       const port = await getAvailablePort();
       const server = app.listen(port);
@@ -50,7 +50,7 @@ describe("Product API tests", () => {
         expect(actual).toEqual(expected);
         expect(status).toEqual(200);
         expect(headers.get("content-type")).toEqual(
-          "application/json; charset=utf-8"
+          "application/json; charset=utf-8",
         );
       } finally {
         server.close();
@@ -65,7 +65,7 @@ describe("Product API tests", () => {
         id: "09",
         type: "CREDIT_CARD",
         name: "Gem Visa",
-        version: "v1"
+        version: "v1",
       };
       const port = await getAvailablePort();
       const server = app.listen(port);
@@ -78,7 +78,7 @@ describe("Product API tests", () => {
         expect(actual).toEqual(expected);
         expect(status).toEqual(200);
         expect(headers.get("content-type")).toEqual(
-          "application/json; charset=utf-8"
+          "application/json; charset=utf-8",
         );
       } finally {
         server.close();

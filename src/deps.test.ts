@@ -1,1 +1,7 @@
-export { describe, it, run, beforeEach,expect } from "https://deno.land/x/tincan/mod.ts";
+export {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  run,
+} from "https://deno.land/x/tincan/mod.ts";

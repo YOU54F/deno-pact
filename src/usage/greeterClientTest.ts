@@ -1,8 +1,8 @@
 import {
-  DenoPact,
-  Pact,
-  getModuleDir,
   assertEquals,
+  DenoPact,
+  getModuleDir,
+  Pact,
   path,
 } from "../deps.dev.ts";
 // } from "../deps.ts";
@@ -12,14 +12,14 @@ import { sayHello } from "./greeter/greeterClient.ts";
 const protoPath = path.join(
   getModuleDir(import.meta),
   "greeter",
-  "greeter.proto"
+  "greeter.proto",
 );
 
 Deno.test(
   {
     name: "Greeter/SayHello Unary gRPC test",
     sanitizeResources: false,
-    sanitizeOps: false
+    sanitizeOps: false,
   },
   async () => {
     const denoPact = new DenoPact();
@@ -31,15 +31,15 @@ Deno.test(
       "pact:proto-service": "Greeter/SayHello",
       "pact:content-type": "application/protobuf",
       request: {
-        name: `matching(type, '${nameToSend}')`
+        name: `matching(type, '${nameToSend}')`,
       },
-      response: { message: `matching(type, '${expectedReply}')` }
+      response: { message: `matching(type, '${expectedReply}')` },
     };
     console.log(
       "🚀 Testing gRPC Greeter Client with Pact Protobuf Plugin  🚀\n",
       {
-        pactContents
-      }
+        pactContents,
+      },
     );
     await denoPact
       .setupLoggers(Pact.LevelFilter.LevelFilter_Info)
@@ -52,7 +52,7 @@ Deno.test(
       .withInteractionContents(
         Pact.InteractionPart.InteractionPart_Request,
         "application/grpc",
-        pactContents
+        pactContents,
       )
       .createMockServerForTransport("grpc")
       .executeTest(async function (): Promise<void> {
@@ -65,5 +65,5 @@ Deno.test(
         assertEquals(results.message, expected);
       })
       .then((results) => console.log(results));
-  }
+  },
 );

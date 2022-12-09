@@ -8,7 +8,7 @@ export const getGreeterClient = (port?: number) => {
   return getClient<Greeter>({
     port: port ?? 37757,
     root: protoFile,
-    serviceName: "Greeter"
+    serviceName: "Greeter",
   });
 };
 
@@ -31,7 +31,7 @@ export const shoutHello = async (port?: number) => {
 import { parse } from "https://deno.land/std@0.119.0/flags/mod.ts";
 const flags = parse(Deno.args, {
   boolean: ["run"],
-  string: ["port"]
+  string: ["port"],
 });
 if (flags.run) {
   if (flags.port) {

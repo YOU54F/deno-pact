@@ -8,7 +8,7 @@ import {
   describe,
   expect,
   it,
-  run
+  run,
 } from "https://deno.land/x/tincan/mod.ts";
 
 describe("Swagger Mock Validator Service", () => {
@@ -18,13 +18,13 @@ describe("Swagger Mock Validator Service", () => {
   beforeEach(async () => {
     oasDefinition = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json")),
+      ),
     );
     pactFile = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json")),
+      ),
     );
   });
 
@@ -32,11 +32,11 @@ describe("Swagger Mock Validator Service", () => {
     it("should return ok if there are no errors", async () => {
       const results = await swaggerMockValidatorService({
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       });
 
       expect(JSON.parse(results)).toEqual({
@@ -46,7 +46,7 @@ describe("Swagger Mock Validator Service", () => {
         consumer: "ExampleConsumer",
         provider: "ExampleProvider",
         specContentPathOrUrl: "content",
-        mockContentPathOrUrl: "content"
+        mockContentPathOrUrl: "content",
       });
     });
     it("should return report on errors", async () => {
@@ -55,11 +55,11 @@ describe("Swagger Mock Validator Service", () => {
       // Act
       const results = await swaggerMockValidatorService({
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       });
       console.log(results);
       // Assert
@@ -67,10 +67,10 @@ describe("Swagger Mock Validator Service", () => {
         JSON.parse(
           decoder.decode(
             await Deno.readFile(
-              path.join(getModuleDir(import.meta), "validationFailure.json")
-            )
-          )
-        )
+              path.join(getModuleDir(import.meta), "validationFailure.json"),
+            ),
+          ),
+        ),
       );
     });
   });

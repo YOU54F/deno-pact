@@ -1,6 +1,5 @@
-import {express} from "./deps.ts";
+import { express } from "./deps.ts";
 import { router } from "./product/product.routes.ts";
-
 
 const app = express();
 app.use(express.json());

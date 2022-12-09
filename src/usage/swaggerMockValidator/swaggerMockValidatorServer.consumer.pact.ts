@@ -1,11 +1,6 @@
-import { describe, it, run, beforeEach,expect  } from "../../deps.test.ts";
+import { beforeEach, describe, expect, it, run } from "../../deps.test.ts";
 
-import {
-  DenoPact,
-  Pact,
-  getModuleDir,
-  path,
-} from "../../deps.dev.ts";
+import { DenoPact, getModuleDir, Pact, path } from "../../deps.dev.ts";
 // } from "../../deps.ts";
 
 const decoder = new TextDecoder("utf-8");
@@ -17,13 +12,13 @@ describe("Swagger Mock Validator Service", () => {
   beforeEach(async () => {
     oasDefinition = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json")),
+      ),
     );
     pactFile = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json")),
+      ),
     );
   });
 
@@ -36,16 +31,16 @@ describe("Swagger Mock Validator Service", () => {
         consumer: "ExampleConsumer",
         provider: "ExampleProvider",
         specContentPathOrUrl: "content",
-        mockContentPathOrUrl: "content"
+        mockContentPathOrUrl: "content",
       };
 
       const requestData = {
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       };
 
       const denoPact = new DenoPact();
@@ -54,7 +49,7 @@ describe("Swagger Mock Validator Service", () => {
         // Arrange
         .newPact(
           "swagger-mock-validator-consumer",
-          "swagger-mock-validator-provider"
+          "swagger-mock-validator-provider",
         )
         .addMetaDataToPact(denoPact.getPactFfiVersion())
         .newInteraction("A OpenAPI/Pact request")
@@ -66,20 +61,19 @@ describe("Swagger Mock Validator Service", () => {
         .withHeader(
           Pact.InteractionPart.InteractionPart_Request,
           "content-type",
-          "application/json"
+          "application/json",
         )
         .withBody(
           Pact.InteractionPart.InteractionPart_Request,
           "application/json",
-          requestData
+          requestData,
         )
         .withBody(
           Pact.InteractionPart.InteractionPart_Response,
           "application/json",
-          expected
+          expected,
         )
         .createMockServerForTransport("http", "0.0.0.0", 0)
-
         .executeTest(async () => {
           // Act
           const response = await fetch(
@@ -89,9 +83,9 @@ describe("Swagger Mock Validator Service", () => {
               body: JSON.stringify(requestData),
               headers: {
                 Accept: "application/json",
-                "Content-Type": "application/json"
-              }
-            }
+                "Content-Type": "application/json",
+              },
+            },
           );
           // Assert
           const actual = await response.json();
@@ -105,18 +99,18 @@ describe("Swagger Mock Validator Service", () => {
       const expected = JSON.parse(
         decoder.decode(
           await Deno.readFile(
-            path.join(getModuleDir(import.meta), "validationFailure.json")
-          )
-        )
+            path.join(getModuleDir(import.meta), "validationFailure.json"),
+          ),
+        ),
       );
 
       const requestData = {
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       };
 
       const denoPact = new DenoPact();
@@ -125,7 +119,7 @@ describe("Swagger Mock Validator Service", () => {
         // Arrange
         .newPact(
           "swagger-mock-validator-consumer",
-          "swagger-mock-validator-provider"
+          "swagger-mock-validator-provider",
         )
         .addMetaDataToPact(denoPact.getPactFfiVersion())
         .newInteraction("A OpenAPI/Pact request")
@@ -137,20 +131,19 @@ describe("Swagger Mock Validator Service", () => {
         .withHeader(
           Pact.InteractionPart.InteractionPart_Request,
           "content-type",
-          "application/json"
+          "application/json",
         )
         .withBody(
           Pact.InteractionPart.InteractionPart_Request,
           "application/json",
-          requestData
+          requestData,
         )
         .withBody(
           Pact.InteractionPart.InteractionPart_Response,
           "application/json",
-          expected
+          expected,
         )
         .createMockServerForTransport("http", "0.0.0.0", 0)
-
         .executeTest(async () => {
           // Act
           const response = await fetch(
@@ -160,17 +153,16 @@ describe("Swagger Mock Validator Service", () => {
               body: JSON.stringify(requestData),
               headers: {
                 Accept: "application/json",
-                "Content-Type": "application/json"
-              }
-            }
+                "Content-Type": "application/json",
+              },
+            },
           );
           // Assert
           const actual = await response.json();
           expect(actual).toEqual(expected);
         })
         .then((results) => console.log(results));
-    }
-   );
+    });
   });
 });
 

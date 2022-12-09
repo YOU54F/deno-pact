@@ -3,12 +3,12 @@ import * as path from "https://deno.land/std/path/mod.ts";
 import express from "npm:express";
 import { server as swaggerMockValidatorServer } from "./swaggerMockValidatorServer.ts";
 import {
-  beforeEach,
   afterEach,
+  beforeEach,
   describe,
   expect,
   it,
-  run
+  run,
 } from "https://deno.land/x/tincan/mod.ts";
 const decoder = new TextDecoder("utf-8");
 
@@ -23,13 +23,13 @@ describe("Swagger Mock Validator Service", () => {
     server = swaggerMockValidatorServer(3000);
     oasDefinition = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "oas.json")),
+      ),
     );
     pactFile = JSON.parse(
       decoder.decode(
-        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json"))
-      )
+        await Deno.readFile(path.join(getModuleDir(import.meta), "pact.json")),
+      ),
     );
   });
 
@@ -45,16 +45,16 @@ describe("Swagger Mock Validator Service", () => {
         consumer: "ExampleConsumer",
         provider: "ExampleProvider",
         specContentPathOrUrl: "content",
-        mockContentPathOrUrl: "content"
+        mockContentPathOrUrl: "content",
       };
 
       const requestData = {
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       };
 
       const response = await fetch("http://localhost:3000", {
@@ -62,8 +62,8 @@ describe("Swagger Mock Validator Service", () => {
         body: JSON.stringify(requestData),
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
       const actual = await response.json();
       console.log("response", { actual, expected });
@@ -75,18 +75,18 @@ describe("Swagger Mock Validator Service", () => {
       const expected = JSON.parse(
         decoder.decode(
           await Deno.readFile(
-            path.join(getModuleDir(import.meta), "validationFailure.json")
-          )
-        )
+            path.join(getModuleDir(import.meta), "validationFailure.json"),
+          ),
+        ),
       );
 
       const requestData = {
         oas: {
-          content: oasDefinition
+          content: oasDefinition,
         },
         pact: {
-          content: pactFile
-        }
+          content: pactFile,
+        },
       };
 
       const response = await fetch("http://localhost:3000", {
@@ -94,8 +94,8 @@ describe("Swagger Mock Validator Service", () => {
         body: JSON.stringify(requestData),
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       });
       const actual = await response.json();
       console.log("response", { actual, expected });

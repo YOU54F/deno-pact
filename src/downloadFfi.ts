@@ -3,10 +3,10 @@ import { gunzipFile } from "https://deno.land/x/compress@v0.4.4/gzip/mod.ts";
 import { parse } from "https://deno.land/std/flags/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
 import {
-  libraryFilename,
   DenoPact,
+  libraryFilename,
   PACT_FFI_LOCATION,
-  PACT_FFI_VERSION
+  PACT_FFI_VERSION,
 } from "./denoPact.ts";
 
 async function downloadFile(src: string, dest: string) {
@@ -16,15 +16,15 @@ async function downloadFile(src: string, dest: string) {
   const resp = await fetch(src);
   if (!resp.ok) {
     throw new Deno.errors.BadResource(
-      `Request failed with status ${resp.status}`
+      `Request failed with status ${resp.status}`,
     );
   } else if (!resp.body) {
     throw new Deno.errors.UnexpectedEof(
-      `The download url ${src} doesn't contain a file to download`
+      `The download url ${src} doesn't contain a file to download`,
     );
   } else if (resp.status === 404) {
     throw new Deno.errors.NotFound(
-      `The requested url "${src}" could not be found`
+      `The requested url "${src}" could not be found`,
     );
   }
   await ensureFile(dest);
@@ -58,8 +58,10 @@ export const detectFfiDownloadForPlatform = (ffiVersion = PACT_FFI_VERSION) => {
       `We do not have a binary for your platform ${platform}`;
       break;
   }
-  const ffiLibDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
-  const ffiHeaderDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
+  const ffiLibDownloadLocation =
+    `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
+  const ffiHeaderDownloadLocation =
+    `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
   console.log(ffiLibDownloadLocation);
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };
@@ -72,7 +74,7 @@ export const downloadFileAndExtract = async (args: {
   await downloadFile(fileLocation, path.join(pathToWrite, "tmp.gz"));
   await gunzipFile(
     path.join(pathToWrite, "tmp.gz"),
-    path.join(pathToWrite, libraryFilename)
+    path.join(pathToWrite, libraryFilename),
   );
   Deno.removeSync(path.join(pathToWrite, "tmp.gz"));
   const fileNames: string[] = [];
@@ -91,7 +93,7 @@ export const downloadFfiForPlatform = async (ffiVersion = PACT_FFI_VERSION) => {
     console.log("downloading", locs.ffiLibDownloadLocation);
     await downloadFileAndExtract({
       fileLocation: locs.ffiLibDownloadLocation,
-      pathToWrite: PACT_FFI_LOCATION
+      pathToWrite: PACT_FFI_LOCATION,
     });
   } else {
     console.log("pact ffi library exists");
@@ -100,7 +102,7 @@ export const downloadFfiForPlatform = async (ffiVersion = PACT_FFI_VERSION) => {
     console.log("downloading", locs.ffiHeaderDownloadLocation);
     await downloadFile(
       locs.ffiHeaderDownloadLocation,
-      path.join(PACT_FFI_LOCATION, "pact.h")
+      path.join(PACT_FFI_LOCATION, "pact.h"),
     );
   } else {
     console.log("pact header files exist");
@@ -114,21 +116,23 @@ const checkIfFfiExists = async (libraryFilename: string) => {
   try {
     pactFfiLib = await Deno.stat(path.join(PACT_FFI_LOCATION, libraryFilename));
   } catch (e) {
-    if (e instanceof Deno.errors.NotFound)
+    if (e instanceof Deno.errors.NotFound) {
       console.error("ffi lib does not exist, will download", libraryFilename);
+    }
   }
   try {
     pactFfiHeaders = await Deno.stat(path.join(PACT_FFI_LOCATION, "pact.h"));
   } catch (e) {
-    if (e instanceof Deno.errors.NotFound)
+    if (e instanceof Deno.errors.NotFound) {
       console.error("ffi header file does not exist, will download");
+    }
   }
 
   return { pactFfiLib, pactFfiHeaders };
 };
 
 const flags = parse(Deno.args, {
-  boolean: ["run", "cli"]
+  boolean: ["run", "cli"],
 });
 if (flags.run) {
   await downloadFfiForPlatform().then(() => {
@@ -139,7 +143,7 @@ if (flags.run) {
 }
 
 export const detectStandaloneCliDownloadForPlatform = (
-  ffiVersion = PACT_FFI_VERSION
+  ffiVersion = PACT_FFI_VERSION,
 ) => {
   const platform = Deno.build.os + "-" + Deno.build.arch;
   console.log(platform);
@@ -165,8 +169,10 @@ export const detectStandaloneCliDownloadForPlatform = (
       `We do not have a binary for your platform ${platform}`;
       break;
   }
-  const ffiLibDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
-  const ffiHeaderDownloadLocation = `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
+  const ffiLibDownloadLocation =
+    `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/${filename}`;
+  const ffiHeaderDownloadLocation =
+    `https://github.com/pact-foundation/pact-reference/releases/download/libpact_ffi-${ffiVersion}/pact.h`;
   console.log(ffiLibDownloadLocation);
   return { ffiLibDownloadLocation, ffiHeaderDownloadLocation };
 };

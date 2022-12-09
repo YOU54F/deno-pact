@@ -1,11 +1,6 @@
 import { describe, it, run } from "../deps.test.ts";
 
-import {
-  DenoPact,
-  Pact,
-  path,
-  isPortAvailableSync
-} from "../deps.dev.ts";
+import { DenoPact, isPortAvailableSync, Pact, path } from "../deps.dev.ts";
 // } from "../deps.ts";
 
 describe("Verify Area Calculator Provider with pact", () => {
@@ -16,7 +11,7 @@ describe("Verify Area Calculator Provider with pact", () => {
       const port = 37757;
       console.log(
         "port avail?",
-        isPortAvailableSync({ port, hostname: "localhost" })
+        isPortAvailableSync({ port, hostname: "localhost" }),
       );
       const name = "area-calculator-provider";
       const providerVersion = "foo-sha-123";
@@ -26,7 +21,7 @@ describe("Verify Area Calculator Provider with pact", () => {
         .setupLoggers(Pact.LevelFilter.LevelFilter_Info)
         .verifierSetProviderInfo({
           // name, // I assume name is taken from the pact file, if it is not set ?
-          port
+          port,
           // basePath: "/",
           // transport: "http",
           // hostname: "localhost"
@@ -39,13 +34,13 @@ describe("Verify Area Calculator Provider with pact", () => {
         ])
         .verifierSetVerificationOptions({
           disableSslVerification: false,
-          requestTime: 5000
+          requestTime: 5000,
         })
         .verifierSetPublishOptions({
           providerVersion,
           providerBranch: "safbranch",
           providerTags: ["some", "tags", "yo"],
-          buildUrl: "http://funkyurl.com"
+          buildUrl: "http://funkyurl.com",
         })
         .verifierSetConsumerFilters({ names: ["area-calculator-consumer"] })
         .verifierAddDirectorySource({ pathToDir: pactDir })

@@ -1,6 +1,6 @@
 import { describe, it, run } from "../../deps.test.ts";
 
-import { DenoPact, Pact, isPortAvailableSync } from "../../deps.dev.ts";
+import { DenoPact, isPortAvailableSync, Pact } from "../../deps.dev.ts";
 // } from "../../deps.ts";
 
 describe("Verify Swagger Mock Validator Service with pact", () => {
@@ -9,7 +9,7 @@ describe("Verify Swagger Mock Validator Service with pact", () => {
       const port = 3000;
       console.log(
         "port avail?",
-        isPortAvailableSync({ port, hostname: "localhost" })
+        isPortAvailableSync({ port, hostname: "localhost" }),
       );
       const name = "swagger-mock-validator-provider";
       const providerVersion = "foo-sha-123";
@@ -21,15 +21,15 @@ describe("Verify Swagger Mock Validator Service with pact", () => {
           scheme: "http",
           path: "/",
           port,
-          host: "localhost"
+          host: "localhost",
         })
         .verifierSetVerificationOptions({
           disableSslVerification: false,
-          requestTime: 5000
+          requestTime: 5000,
         })
         .verifierAddFileSource({
           pathToFile:
-            "./pacts/swagger-mock-validator-consumer-swagger-mock-validator-provider.json"
+            "./pacts/swagger-mock-validator-consumer-swagger-mock-validator-provider.json",
         })
         .verifierExecute();
     });

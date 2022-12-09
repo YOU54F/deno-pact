@@ -8,18 +8,19 @@ const protoPath = new URL("./greeter.proto", import.meta.url);
 const protoFile = await Deno.readTextFile(protoPath);
 
 server.addService<Greeter>(protoFile, {
-  
-   async SayHello({ name }): Promise<{ message: string; }> {
+  async SayHello({ name }): Promise<{ message: string }> {
     const message = `hello ${name || "stranger"}`;
     return Promise.resolve({ message });
   },
 
-  async *ShoutHello({ name }): AsyncGenerator<{ message: string; }, void, unknown> {
+  async *ShoutHello(
+    { name },
+  ): AsyncGenerator<{ message: string }, void, unknown> {
     for (const n of [0, 1, 2]) {
       const message = `hello ${name || "stranger"} #${n}`;
       yield { message };
     }
-  }
+  },
 });
 
 console.log(`gonna listen on ${port} port`);

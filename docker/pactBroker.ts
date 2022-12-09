@@ -21,7 +21,7 @@ const containerPactDb = await docker.containers.create("pact_db", {
   Env: ["POSTGRES_DB=pact", "POSTGRES_PASSWORD=password", "POSTGRES_USER=pact"],
   Volumes: { "data_volume:/var/lib/postgresql/data": {} },
   // @ts-ignore
-  HostConfig: { PortBindings: { "5432/tcp": [{ HostPort: "5432" }] } }
+  HostConfig: { PortBindings: { "5432/tcp": [{ HostPort: "5432" }] } },
 });
 console.log("Container : %o", containerPactDb.message);
 
@@ -35,13 +35,13 @@ const containerPactBroker = await docker.containers.create("pact_broker", {
     "PACT_BROKER_DATABASE_PASSWORD=password",
     "PACT_BROKER_DATABASE_HOST=db",
     "PACT_BROKER_DATABASE_NAME=pact",
-    "PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES=10"
+    "PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES=10",
   ],
   HostConfig: {
     // @ts-ignore
     Links: ["pact_db:db"],
-    PortBindings: { "9292/tcp": [{ HostPort: "9292" }] }
-  }
+    PortBindings: { "9292/tcp": [{ HostPort: "9292" }] },
+  },
 });
 
 console.log("Container : %o", containerPactBroker.message);

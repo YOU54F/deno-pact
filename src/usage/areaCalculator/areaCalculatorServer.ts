@@ -7,14 +7,14 @@ const server = new GrpcServer();
 
 const protoPath = new URL(
   path.join(getModuleDir(import.meta), "area_calculator.proto"),
-  import.meta.url
+  import.meta.url,
 );
 const protoFile = await Deno.readTextFile(protoPath);
 
 server.addService<Calculator>(protoFile, {
   async calculateOne(message) {
     console.log(
-      `Calculating the area for one value  ${JSON.stringify(message)}`
+      `Calculating the area for one value  ${JSON.stringify(message)}`,
     );
     switch (message.shape) {
       case "rectangle":
@@ -22,29 +22,28 @@ server.addService<Calculator>(protoFile, {
         return { value: [message.rectangle.length * message.rectangle.width] };
       case "square":
         return {
-          value: [message.square.edgeLength * message.square.edgeLength]
+          value: [message.square.edgeLength * message.square.edgeLength],
         };
       case "circle":
         return {
-          value: [Math.PI * message.circle.radius * message.circle.radius]
+          value: [Math.PI * message.circle.radius * message.circle.radius],
         };
       case "parallelogram":
         return {
           value: [
-            message.parallelogram.base_length * message.parallelogram.height
-          ]
+            message.parallelogram.base_length * message.parallelogram.height,
+          ],
         };
       case "triangle":
-        const p =
-          (message.triangle.edgeA +
-            message.triangle.edgeB +
-            message.triangle?.edgeC) /
+        const p = (message.triangle.edgeA +
+          message.triangle.edgeB +
+          message.triangle?.edgeC) /
           2.0;
         const area = Math.sqrt(
           p *
             (p - message.triangle.edgeA) *
             (p - message.triangle.edgeB) *
-            (p - message.triangle.edgeC)
+            (p - message.triangle.edgeC),
         );
         return { value: [area] };
       default:
@@ -54,7 +53,7 @@ server.addService<Calculator>(protoFile, {
   async calculateMulti(message) {
     console.log(`Unimplemented  ${JSON.stringify(message)}`);
     return { value: [1] };
-  }
+  },
 });
 
 const main = async (port = 37757) => {

@@ -14,7 +14,7 @@ import { GrpcServer } from "https://deno.land/x/grpc_basic@0.4.6/server.ts";
 import { getAvailablePort } from "https://deno.land/x/port/mod.ts";
 import { fromProto } from "https://deno.land/x/grpc_basic@0.4.6/gen/dts.ts";
 
-const generatedTypings = fromProto(new TextDecoder().decode(protoFile))
+const generatedTypings = fromProto(new TextDecoder().decode(protoFile));
 // console.log(generatedTypings)
 await Deno.writeTextFile("./proto.gen.d.ts", generatedTypings);
 
