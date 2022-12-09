@@ -13,7 +13,7 @@
 ## Get the Pact FFI
 
 5. `deno run -A --unstable https://deno.land/x/pact/src/downloadFfi.ts --run`{{exec}}
-6. `touch helloPactDeno.ts`
+6. `touch helloPactDeno.ts`{{exec}}
 
 
 ```ts
@@ -22,7 +22,7 @@ const denoPact = new DenoPact();
 console.log(denoPact.getPactFfiVersion());
 ```{{copy}}
 
-7. `deno run -A --unstable helloPactDeno.ts`
+7. `deno run -A --unstable helloPactDeno.ts`{{exec}}
 
 ## Run the Examples
 
