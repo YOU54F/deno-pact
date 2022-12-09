@@ -2,6 +2,8 @@
 
 <img src="https://avatars.githubusercontent.com/u/42048915?s=200&v=4" height="80" width="80"><img src="https://i.pinimg.com/originals/01/9e/e0/019ee012b9ca5318b09d2f5696fc54ee.png" height="80" width="80"><img src="https://user-images.githubusercontent.com/19932401/206557102-f5141b7d-a4f4-441b-84f6-ede3552c4696.png" height="80" width="80">
 
+Try out Deno-Pact in your browser, via our [interactive tutorial](https://killercoda.com/deno-pact/course/tutorials/deno-pact)
+
 ## Pre-Reqs
 
 You need to
@@ -33,16 +35,21 @@ import { downloadFfiForPlatform } from "https://deno.land/x/pact/src/mod.ts";
 await downloadFfiForPlatform();
 ```
 
-## How to use
+## How to get started
+
+- `touch helloPactDeno.ts`
 
 ```ts
 import { DenoPact, Pact } from "https://deno.land/x/pact/src/mod.ts";
 const denoPact = new DenoPact();
+console.log(denoPact.getPactFfiVersion());
 ```
+
+- `deno run -A --unstable helloPactDeno.ts`
 
 ### Egg Users
 
-You can install via nest.land. Check the [package](https://nest.land/package/pact) for the latest version
+You can install via nest.land - Check the [package](https://nest.land/package/pact) for the latest version
 
 ```sh
 import { DenoPact, Pact } from "https://x.nest.land/pact@0.0.6/src/mod.ts"
