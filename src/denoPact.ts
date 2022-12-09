@@ -12,13 +12,14 @@ export const PACT_FFI_LOCATION = path.join(
   home_dir() ?? "",
   ".pact",
   "ffi",
-  PACT_FFI_VERSION,
+  PACT_FFI_VERSION
 );
-export const libraryFilename = Deno.build.os === "darwin"
-  ? "libpact_ffi.dylib"
-  : Deno.build.os === "windows"
-  ? "pact_ffi.dll"
-  : "libpact_ffi.so";
+export const libraryFilename =
+  Deno.build.os === "darwin"
+    ? "libpact_ffi.dylib"
+    : Deno.build.os === "windows"
+    ? "pact_ffi.dll"
+    : "libpact_ffi.so";
 export const libraryLocation = path.join(PACT_FFI_LOCATION, libraryFilename);
 export class DenoPact {
   private ffi: typeof PactFfi;
@@ -66,20 +67,20 @@ export class DenoPact {
     console.debug("🚧 calling verifier with args:", {});
     this.verifierHandle = this.ffi.pactffi_verifier_new_for_application(
       cstr(this.appName),
-      cstr(this.getPactFfiVersion()),
+      cstr(this.getPactFfiVersion())
     );
     console.debug("✅ called verifier, result:", this.verifierHandle);
     return this;
   }
   public verifierSetColouredOutput(enable = true) {
     console.debug("🚧 calling verifierSetColouredOutput with args:", {
-      enable,
+      enable
     });
 
     if (!enable && this.verifierHandle) {
       const result = this.ffi.pactffi_verifier_set_coloured_output(
         this.verifierHandle,
-        0,
+        0
       );
       console.debug("✅ called verifierSetColouredOutput, result:", { result });
     } else {
@@ -87,8 +88,8 @@ export class DenoPact {
         "⚠️ no verifierHandle or coloured debugs already enabled:",
         {
           verifierHandle: !!this.verifierHandle,
-          enable,
-        },
+          enable
+        }
       );
     }
     return this;
@@ -120,12 +121,12 @@ export class DenoPact {
         // errors if not set
         args.port ?? 0,
         // defaults to /
-        args.path ? cstr(args.path) : null,
+        args.path ? cstr(args.path) : null
       );
       console.debug("✅ called verifierSetProviderInfo, result:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -135,20 +136,20 @@ export class DenoPact {
     requestTime?: number;
   }) {
     console.debug("🚧 calling verifierSetVerificationOptions with args:", {
-      args,
+      args
     });
     if (this.verifierHandle) {
       this.ffi.pactffi_verifier_set_verification_options(
         this.verifierHandle,
         args.disableSslVerification ? 1 : 0,
-        BigInt(args.requestTime ?? 5000),
+        BigInt(args.requestTime ?? 5000)
       ); // request timeout
 
       console.debug("✅ added verifierSetVerificationOptions:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -158,13 +159,13 @@ export class DenoPact {
     if (this.verifierHandle) {
       this.ffi.pactffi_verifier_add_file_source(
         this.verifierHandle,
-        cstr(args.pathToFile),
+        cstr(args.pathToFile)
       );
       console.debug("✅ added verifierAddFileSource:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -182,13 +183,13 @@ export class DenoPact {
         cstr(args.url),
         cstr(args.username ?? ""),
         cstr(args.password ?? ""),
-        cstr(args.token ?? ""),
+        cstr(args.token ?? "")
       );
       console.debug("✅ added verifierAddUrlSource:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -206,7 +207,7 @@ export class DenoPact {
     consumerVersionTags?: string[];
   }) {
     console.debug("🚧 calling verifierBrokerSourceWithSelectors with args:", {
-      args,
+      args
     });
     if (this.verifierHandle) {
       this.ffi.pactffi_verifier_broker_source_with_selectors(
@@ -225,13 +226,13 @@ export class DenoPact {
         this.arrJson2Ptrs(args.consumerVersionSelectors ?? []),
         args.consumerVersionSelectors?.length ?? 0,
         this.arr2Ptrs(args.consumerVersionTags ?? []),
-        args.consumerVersionTags?.length ?? 0,
+        args.consumerVersionTags?.length ?? 0
       );
       console.debug("✅ called verifierBrokerSourceWithSelectors:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -249,13 +250,13 @@ export class DenoPact {
         cstr(args.url ?? null),
         cstr(args.username ?? ""),
         cstr(args.password ?? ""),
-        cstr(args.token ?? ""),
+        cstr(args.token ?? "")
       );
       console.debug("✅ added verifierBrokerSource:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -268,13 +269,13 @@ export class DenoPact {
     if (this.verifierHandle) {
       this.ffi.pactffi_verifier_add_directory_source(
         this.verifierHandle,
-        cstr(args.pathToDir),
+        cstr(args.pathToDir)
       );
       console.debug("✅ added verifierAddDirectorySource:", { args });
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -285,10 +286,10 @@ export class DenoPact {
       path?: string;
       scheme?: string;
       port?: number;
-    }[],
+    }[]
   ) {
     console.debug("🚧 calling verifierAddProviderTransport with args:", {
-      args,
+      args
     });
     if (this.verifierHandle) {
       args.forEach(
@@ -306,15 +307,15 @@ export class DenoPact {
             transport.protocol ? cstr(transport.protocol) : null,
             transport.port ?? 0,
             transport.path ? cstr(transport.path) : null,
-            transport.scheme ? cstr(transport.scheme) : null,
+            transport.scheme ? cstr(transport.scheme) : null
           );
           console.debug("✅ added transport:", { transport });
-        },
+        }
       );
     } else {
       console.debug("⚠️ no verifierHandle", {
         verifierHandle: !!this.verifierHandle,
-        args,
+        args
       });
     }
     return this;
@@ -323,10 +324,10 @@ export class DenoPact {
     console.debug("🚧 calling verifierExecute");
     if (this.verifierHandle) {
       this.verificationResult = this.ffi.pactffi_verifier_execute(
-        this.verifierHandle,
+        this.verifierHandle
       );
       console.debug(" ✅ called verifierExecute: ", {
-        verificationResult: this.verificationResult,
+        verificationResult: this.verificationResult
       });
       this.verifierCheckResults();
       this.verifierShutdown();
@@ -336,7 +337,7 @@ export class DenoPact {
       }
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: this.verifierHandle,
+        verifierHandle: this.verifierHandle
       });
     }
     return this;
@@ -346,14 +347,14 @@ export class DenoPact {
     if (this.verificationResultsJson) {
       Deno.openSync(this.verificationResultsFileName, {
         create: true,
-        write: true,
+        write: true
       }).writeSync(new TextEncoder().encode(this.verificationResultsJson));
       console.debug(" ✅ called verifierWriteResultsToFile: ", {
-        verificationResult: this.verificationResult,
+        verificationResult: this.verificationResult
       });
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -366,11 +367,11 @@ export class DenoPact {
       this.verificationResult != 0
     ) {
       this.verificationResultsJson = readCString(
-        this.ffi.pactffi_verifier_json(this.verifierHandle),
+        this.ffi.pactffi_verifier_json(this.verifierHandle)
       );
       console.debug(
         " 🚨 Failed verification",
-        JSON.stringify(JSON.parse(this.verificationResultsJson), null, "\t"),
+        JSON.stringify(JSON.parse(this.verificationResultsJson), null, "\t")
       );
 
       console.debug();
@@ -379,7 +380,7 @@ export class DenoPact {
       }
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -388,12 +389,12 @@ export class DenoPact {
     console.debug("🚧 calling verifierJsonResults");
     if (this.verifierHandle) {
       this.verificationResultsJson = this.ffi.pactffi_verifier_json(
-        this.verifierHandle,
+        this.verifierHandle
       );
       console.debug("✅ called verifierJsonResults:");
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -405,7 +406,7 @@ export class DenoPact {
       console.debug("✅ called verifierShutdown:");
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -420,11 +421,11 @@ export class DenoPact {
         this.verifierHandle,
         cstr(args.description ?? ""),
         cstr(args.state ?? ""),
-        args.noState ? 0 : 1,
+        args.noState ? 0 : 1
       );
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -445,11 +446,11 @@ export class DenoPact {
         cstr(args.buildUrl ?? ""),
         this.arr2Ptrs(args.providerTags ?? []),
         args.providerTags?.length ?? 0,
-        cstr(args.providerBranch ?? ""),
+        cstr(args.providerBranch ?? "")
       );
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -460,11 +461,11 @@ export class DenoPact {
       this.ffi.pactffi_verifier_set_consumer_filters(
         this.verifierHandle,
         this.arr2Ptrs(args.names ?? []),
-        args.names?.length ?? 0,
+        args.names?.length ?? 0
       );
     } else {
       console.debug("⚠️ no verifierHandle", {
-        verifierHandle: !!this.verifierHandle,
+        verifierHandle: !!this.verifierHandle
       });
     }
     return this;
@@ -502,13 +503,13 @@ export class DenoPact {
     this.ffi.pactffi_logger_init();
     this.ffi.pactffi_logger_attach_sink(
       cstr("stdout"),
-      logLevel ?? Pact.LevelFilter.LevelFilter_Info,
+      logLevel ?? Pact.LevelFilter.LevelFilter_Info
     );
     this.ffi.pactffi_logger_apply();
     this.ffi.pactffi_log_message(
       cstr("pact-deno-ffi"),
       cstr("INFO"),
-      cstr(`hello from ffi version: ${this.getPactFfiVersion()}`),
+      cstr(`hello from ffi version: ${this.getPactFfiVersion()}`)
     );
 
     return this;
@@ -522,7 +523,7 @@ export class DenoPact {
 
     this.pact = this.ffi.pactffi_new_pact(
       cstr(consumer_name),
-      cstr(provider_name),
+      cstr(provider_name)
     );
     return this;
   }
@@ -533,11 +534,11 @@ export class DenoPact {
 
       if (this.matched === 0) {
         const mismatches = this.ffi.pactffi_mock_server_mismatches(
-          this.mockServerPort,
+          this.mockServerPort
         );
         if (mismatches) {
           this.logMessage(
-            "pactffi_mock_server_mismatches: " + readCString(mismatches),
+            "pactffi_mock_server_mismatches: " + readCString(mismatches)
           );
           this.mismatches = readCString(mismatches) as string;
         }
@@ -550,7 +551,7 @@ export class DenoPact {
       const res_write_pact = this.ffi.pactffi_write_pact_file(
         this.mockServerPort,
         cstr(pactDir ?? this.PACT_FILE_DIR),
-        0,
+        0
       );
       this.logMessage("pactffi_write_pact_file: " + res_write_pact);
     } else {
@@ -562,34 +563,32 @@ export class DenoPact {
   public createMockServer(
     pact: Pact.PactHandle,
     hostname = "127.0.0.1",
-    port = "0",
+    port = "0"
   ) {
     console.debug("🚧 creating createMockServer");
 
     this.mockServerPort = this.ffi.pactffi_create_mock_server(
       cstr(JSON.stringify(pact)),
       cstr(hostname + ":" + port),
-      0,
+      0
     );
     console.debug("🚧 created mockServerPort", this.mockServerPort);
 
     this.ffi.pactffi_log_message(
       cstr("pact-deno-ffi"),
       cstr("INFO"),
-      cstr(
-        "pactffi_create_mock_server: running on port " + this.mockServerPort,
-      ),
+      cstr("pactffi_create_mock_server: running on port " + this.mockServerPort)
     );
     return this;
   }
   public cleanupMockServer() {
     if (this.mockServerPort) {
       console.debug("🚧 creating cleanupMockServer");
-      const pactffi_cleanup_mock_server_result = this.ffi
-        .pactffi_cleanup_mock_server(this.mockServerPort);
+      const pactffi_cleanup_mock_server_result =
+        this.ffi.pactffi_cleanup_mock_server(this.mockServerPort);
       this.logMessage(
         "🧹 Cleaned up Pact Mock Server: " +
-          !!pactffi_cleanup_mock_server_result,
+          !!pactffi_cleanup_mock_server_result
       );
     }
 
@@ -609,7 +608,7 @@ export class DenoPact {
         this.pact,
         cstr(this.appName),
         cstr(key),
-        cstr(value),
+        cstr(value)
       );
     }
     return this;
@@ -620,7 +619,7 @@ export class DenoPact {
 
       this.interaction = this.ffi.pactffi_new_sync_message_interaction(
         this.pact,
-        cstr(description),
+        cstr(description)
       );
     }
     return this;
@@ -630,7 +629,7 @@ export class DenoPact {
       console.debug("🚧 creating new interaction");
       this.interaction = this.ffi.pactffi_new_interaction(
         this.pact,
-        cstr(description),
+        cstr(description)
       );
     }
     return this;
@@ -652,7 +651,7 @@ export class DenoPact {
         this.interaction,
         cstr(description),
         cstr(name),
-        cstr(value),
+        cstr(value)
       );
       console.debug("🚧 result: ", res);
     }
@@ -665,7 +664,7 @@ export class DenoPact {
       const res = this.ffi.pactffi_with_request(
         this.interaction,
         cstr(method),
-        cstr(path),
+        cstr(path)
       );
       console.debug("🚧 result: ", res);
     }
@@ -686,7 +685,7 @@ export class DenoPact {
 
       const res = this.ffi.pactffi_upon_receiving(
         this.interaction,
-        cstr(description),
+        cstr(description)
       );
       console.debug("🚧 result: ", res);
     }
@@ -708,7 +707,7 @@ export class DenoPact {
       const res = this.ffi.pactffi_using_plugin(
         this.pact,
         cstr(pluginName),
-        cstr(pluginVersion),
+        cstr(pluginVersion)
       );
       console.debug("🚧 result: ", res);
     }
@@ -717,20 +716,20 @@ export class DenoPact {
   public withInteractionContents(
     interactionPart: Pact.InteractionPart,
     transportType: string,
-    contents: any,
+    contents: any
   ) {
     if (this.interaction) {
       console.debug("🚧 creating withInteractionContents", {
         interactionPart,
         transportType,
-        contents,
+        contents
       });
 
       const res = this.ffi.pactffi_interaction_contents(
         this.interaction,
         interactionPart,
         cstr(transportType),
-        cstr(JSON.stringify(contents)),
+        cstr(JSON.stringify(contents))
       );
       console.debug("🚧 result: ", res);
     }
@@ -739,7 +738,7 @@ export class DenoPact {
   public withBody(
     interactionPart: Pact.InteractionPart,
     contentType: string,
-    contents: any,
+    contents: any
   ) {
     if (this.interaction) {
       console.debug("🚧 creating withBody");
@@ -748,16 +747,37 @@ export class DenoPact {
         this.interaction,
         interactionPart,
         cstr(contentType),
-        cstr(JSON.stringify(contents)),
+        cstr(contentType.includes("json") ? JSON.stringify(contents) : contents)
       );
       console.debug("🚧 result: ", res);
+    }
+    return this;
+  }
+  public withQueryParamV2(params: { name: string; value: string }[]) {
+    if (this.interaction) {
+      console.debug("🚧 creating withQueryParamV2");
+
+      params.map((param, i) => {
+        if (this.interaction) {
+          console.debug("creating query param", { param, i });
+          const res = this.ffi.pactffi_with_query_parameter_v2(
+            this.interaction,
+            cstr(param.name),
+            0,
+            cstr(param.name)
+          );
+          console.debug("🚧 created withQueryParamV2: ", { res, param });
+        } else {
+          console.debug("🚧 failed to create withQueryParamV2: ", { param });
+        }
+      });
     }
     return this;
   }
   public withHeader(
     interactionPart: Pact.InteractionPart,
     headerName: string,
-    headerValue: string,
+    headerValue: string
   ) {
     if (this.interaction) {
       console.debug("🚧 creating withHeader");
@@ -767,7 +787,7 @@ export class DenoPact {
         interactionPart,
         cstr(headerName),
         0,
-        cstr(headerValue),
+        cstr(headerValue)
       );
       console.debug("🚧 created withHeader: ", res);
     }
@@ -777,7 +797,7 @@ export class DenoPact {
     transport: string,
     address = "0.0.0.0",
     port = 0,
-    transportOptions: 0 | any = 0,
+    transportOptions: 0 | any = 0
   ) {
     if (this.pact) {
       console.debug("🚧 creating createMockServerForTransport");
@@ -787,7 +807,7 @@ export class DenoPact {
         cstr(address),
         port,
         cstr(transport),
-        transportOptions,
+        transportOptions
       );
     }
     return this;
@@ -805,10 +825,10 @@ export class DenoPact {
           {
             message: "🚨 Failed to execute your test",
             error: err.message,
-            ok: false,
+            ok: false
           },
           null,
-          "\t",
+          "\t"
         );
         // return {
         //   then(cb: (results: string) => void) {
@@ -825,7 +845,7 @@ export class DenoPact {
         return JSON.stringify(
           { message: "✅ tests passed 👌", ok: true },
           null,
-          "\t",
+          "\t"
         );
         // return {
         //   then(cb: (results: string) => void) {
@@ -837,23 +857,23 @@ export class DenoPact {
         console.debug("show you da mismatches");
         const results = this.mismatches
           ? JSON.stringify(
-            {
-              message: "🚨 tests failed",
-              error: JSON.parse(this.mismatches),
-              ok: false,
-            },
-            null,
-            "\t",
-          )
+              {
+                message: "🚨 tests failed",
+                error: JSON.parse(this.mismatches),
+                ok: false
+              },
+              null,
+              "\t"
+            )
           : JSON.stringify(
-            {
-              message: "🚨 tests failed",
-              error: "Mock server unable to return mismatches",
-              ok: false,
-            },
-            null,
-            "\t",
-          );
+              {
+                message: "🚨 tests failed",
+                error: "Mock server unable to return mismatches",
+                ok: false
+              },
+              null,
+              "\t"
+            );
         return results;
         // return {
         //   then(cb: (results: string) => void) {
@@ -867,10 +887,10 @@ export class DenoPact {
         {
           message: "🚨 Failed to execute your test",
           error: "Mock server is not running, so could not execute test",
-          ok: false,
+          ok: false
         },
         null,
-        "\t",
+        "\t"
       );
       // return {
       //   then(cb: (results: string) => void) {
