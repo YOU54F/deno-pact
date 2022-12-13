@@ -1,6 +1,13 @@
 import home_dir from "https://deno.land/x/dir/home_dir/mod.ts";
 import * as path from "https://deno.land/std/path/mod.ts";
-import { cstr, loadPactFfi, PactFfi, Pointer, readCString } from "./lib/mod.ts";
+import {
+  cstr,
+  loadPactFfi,
+  PactFfi,
+  Pointer,
+  readCString,
+  StructPointer
+} from "./lib/mod.ts";
 import { PactFfi as Pact } from "./lib/types.ts";
 const DEBUG = Deno.env.get("DEBUG");
 // ENABLE/DISABLE Console Logs
@@ -27,6 +34,7 @@ export class DenoPact {
   private appName = "pact-deno-ffi";
   private PACT_FILE_DIR = "./pacts";
   private pact: Pact.PactHandle | null;
+  private syncHttpPact: Pointer<StructPointer<"SynchronousHttp">> | null;
   private interaction: Pact.InteractionHandle | null;
   private mockServerPort: number | null;
   private matched: number;
@@ -48,6 +56,7 @@ export class DenoPact {
     this.matched = 0;
     this.mismatches = null;
     this.interaction = null;
+    this.syncHttpPact = null;
 
     // This is for our provider verifier side
     this.verifierHandle = null;
@@ -624,6 +633,13 @@ export class DenoPact {
     }
     return this;
   }
+  public syncHttpPactNew() {
+    console.debug("🚧 creating new newSyncHttpPact");
+
+    this.syncHttpPact = this.ffi.pactffi_sync_http_new();
+
+    return this;
+  }
   public newInteraction(description: string) {
     if (this.pact) {
       console.debug("🚧 creating new interaction");
@@ -710,6 +726,56 @@ export class DenoPact {
         cstr(pluginVersion)
       );
       console.debug("🚧 result: ", res);
+    }
+    return this;
+  }
+  public syncHttpSetRequestContents(contents: any, contentType: string) {
+    if (this.syncHttpPact) {
+      console.debug("🚧 creating syncHttpSetRequestContents", {
+        contentType,
+        contents
+      });
+
+      this.ffi.pactffi_sync_http_set_request_contents(
+        this.syncHttpPact,
+        contentType.includes("json")
+          ? cstr(JSON.stringify(contents))
+          : cstr(contents),
+        cstr(contentType)
+      );
+      console.debug("🚧 set syncHttpSetResponseContents: ");
+    }
+    return this;
+  }
+  public syncHttpSetRequestDescription(description: string) {
+    if (this.syncHttpPact) {
+      console.debug("🚧 creating syncHttpSetRequestDescription", {
+        description
+      });
+
+      const res = this.ffi.pactffi_sync_http_set_description(
+        this.syncHttpPact,
+        cstr(description)
+      );
+      console.debug("🚧 result: ", res);
+    }
+    return this;
+  }
+  public syncHttpSetResponseContents(contents: any, contentType: string) {
+    if (this.syncHttpPact) {
+      console.debug("🚧 creating syncHttpSetResponseContents", {
+        contentType,
+        contents
+      });
+
+      this.ffi.pactffi_sync_http_set_response_contents(
+        this.syncHttpPact,
+        contentType.includes("json")
+          ? cstr(JSON.stringify(contents))
+          : cstr(contents),
+        cstr(contentType)
+      );
+      console.debug("🚧 set syncHttpSetResponseContents: ");
     }
     return this;
   }
