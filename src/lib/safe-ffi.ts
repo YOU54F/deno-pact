@@ -14,15 +14,16 @@ namespace Symbols {
 }
 
 export function alloc<T>(): Pointer<T> {
-  return Deno.UnsafePointer.of(new BigUint64Array(1)) as Pointer<T>;
+  return Deno.UnsafePointer.of(new BigUint64Array(1)) as unknown as Pointer<T>;
 }
 
 export function cstr(str: string) {
   return Deno.UnsafePointer.of(
     new TextEncoder().encode(str + "\0"),
-  ) as Pointer<number>;
+  ) as unknown as Pointer<number>;
 }
 
+
 export function readCString(ptr: Pointer<number>): string {
-  return new Deno.UnsafePointerView(ptr).getCString();
+  return new Deno.UnsafePointerView(ptr as unknown as any ).getCString();
 }

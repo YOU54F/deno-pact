@@ -67,7 +67,7 @@ describe("Swagger Mock Validator Service", () => {
       });
       const actual = await response.json();
       console.log("response", { actual, expected });
-      expect(JSON.parse(actual)).toEqual(expected);
+      expect(actual).toEqual(expected);
     });
     it("should return report on errors", async () => {
       pactFile.interactions[0].request.path = "/getNotMyModel";
@@ -99,7 +99,7 @@ describe("Swagger Mock Validator Service", () => {
       });
       const actual = await response.json();
       console.log("response", { actual, expected });
-      expect(JSON.parse(actual)).toEqual(expected);
+      expect(actual).toEqual(expected);
     });
   });
 });
