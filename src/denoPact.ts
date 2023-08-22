@@ -485,7 +485,7 @@ export class DenoPact {
     arr.map((a, i) => {
       buffer[i] = BigInt(cstr(a));
     });
-    return Deno.UnsafePointer.of(buffer) as Pointer<Pointer<number>>;
+    return Deno.UnsafePointer.of(buffer) as unknown as Pointer<Pointer<number>>;
   }
 
   private arrJson2Ptrs(arr: { [key: string]: string | boolean }[]) {
@@ -493,7 +493,7 @@ export class DenoPact {
     arr.map((a, i) => {
       buffer[i] = BigInt(cstr(JSON.stringify(a)));
     });
-    return Deno.UnsafePointer.of(buffer) as Pointer<Pointer<number>>;
+    return Deno.UnsafePointer.of(buffer) as unknown as Pointer<Pointer<number>>;
   }
 
   // general stuff
@@ -873,7 +873,7 @@ export class DenoPact {
         cstr(address),
         port,
         cstr(transport),
-        transportOptions
+        cstr(transportOptions)
       );
     }
     return this;
